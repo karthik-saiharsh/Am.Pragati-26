@@ -1,9 +1,10 @@
-import { createFileRoute } from '@tanstack/react-router'
-import logo from '../logo.svg'
+import { createFileRoute } from "@tanstack/react-router";
+import logo from "../logo.svg";
+import About from "@/components/home-page/About";
 
-export const Route = createFileRoute('/')({
+export const Route = createFileRoute("/")({
   component: App,
-})
+});
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
           Learn TanStack
         </a>
       </header>
+      <About />
     </div>
-  )
+  );
 }
