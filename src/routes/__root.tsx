@@ -1,9 +1,14 @@
-import { Outlet, createRootRouteWithContext } from '@tanstack/react-router'
+import {
+  Outlet,
+  createRootRouteWithContext,
+  useRouterState,
+} from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import { Toaster } from 'react-hot-toast'
 
 import Header from '../components/Header'
+import Footer from '../components/Footer'
 
 import TanStackQueryDevtools from '../providers/tanstack-query-devtools'
 
@@ -13,8 +18,8 @@ interface MyRouterContext {
   queryClient: QueryClient
 }
 
-// Routes without navbar
-const routesWithoutNavbar = [
+// Routes without navbar and footer
+const baseRoutesWithoutChrome = [
   '/login',
   '/signup',
   '/forgot-password',
@@ -26,18 +31,28 @@ const routesWithoutNavbar = [
   '/404',
 ]
 
+const routesWithoutNavbar = new Set(baseRoutesWithoutChrome)
+const routesWithoutFooter = new Set([
+  ...baseRoutesWithoutChrome
+])
+
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   component: RootComponent,
 })
 
 function RootComponent() {
-  const pathname = window.location.pathname
-  const showNavbar = !routesWithoutNavbar.includes(pathname)
+  const pathname = useRouterState({
+    select: (state) => state.location.pathname,
+  })
+
+  const showNavbar = !routesWithoutNavbar.has(pathname)
+  const showFooter = !routesWithoutFooter.has(pathname)
 
   return (
     <>
       {showNavbar && <Header />}
       <Outlet />
+      {showFooter && <Footer />}
       <Toaster position="top-right" />
       <TanStackDevtools
         config={{
