@@ -61,10 +61,10 @@ export const RadianceLoader = () => {
       <div className="relative z-10 flex flex-col items-center">
 
         {/* CRT Screen Frame */}
-        <div className="relative bg-linear-to-b from-gray-700 to-gray-900 p-6 rounded-lg border-4 border-gray-800 shadow-[0_0_40px_rgba(45,226,230,0.15)] w-[400px]">
+        <div className="relative bg-linear-to-b from-gray-700 to-gray-900 p-6 rounded-lg border-4 border-gray-800 shadow-[0_0_40px_rgba(45,226,230,0.15)] w-100">
           
           {/* Screen bezel */}
-          <div className="relative bg-black p-8 rounded border-4 border-gray-600 h-[280px] flex items-center justify-center">
+          <div className="relative bg-black p-8 rounded border-4 border-gray-600 h-70 flex items-center justify-center">
             
             {/* Scanlines */}
             <div 
