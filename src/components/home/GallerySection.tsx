@@ -355,9 +355,9 @@ export function GallerySection() {
       className="relative min-h-125 sm:min-h-150 md:min-h-175 lg:min-h-187.5 overflow-hidden py-8 sm:py-10 md:py-12 bg-[#0f0f2e]"
     >
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute w-48 h-48 sm:w-80 sm:h-80 md:w-[500px] md:h-[500px] lg:w-[600px] lg:h-[600px] rounded-full blur-[80px] sm:blur-[120px] md:blur-[150px] opacity-30 -top-[10%] sm:-top-[15%] md:-top-[20%] -left-[5%] sm:-left-[8%] md:-left-[10%] bg-gradient-to-br from-pink-500 to-fuchsia-600" />
-        <div className="absolute w-40 h-40 sm:w-64 sm:h-64 md:w-[400px] md:h-[400px] lg:w-[500px] lg:h-[500px] rounded-full blur-[80px] sm:blur-[120px] md:blur-[150px] opacity-30 -bottom-[10%] sm:-bottom-[15%] md:-bottom-[20%] -right-[5%] sm:-right-[8%] md:-right-[10%] bg-gradient-to-br from-cyan-400 to-violet-500" />
-        <div className="absolute w-64 h-32 sm:w-[500px] sm:h-[250px] md:w-[600px] md:h-[300px] lg:w-[800px] lg:h-[400px] rounded-full blur-[100px] sm:blur-[150px] md:blur-[200px] opacity-15 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-yellow-400" />
+        <div className="absolute w-48 h-48 sm:w-80 sm:h-80 md:w-125 md:h-125 lg:w-150 lg:h-150 rounded-full blur-[80px] sm:blur-[120px] md:blur-[150px] opacity-30 -top-[10%] sm:-top-[15%] md:-top-[20%] -left-[5%] sm:-left-[8%] md:-left-[10%] bg-linear-to-br from-pink-500 to-fuchsia-600" />
+        <div className="absolute w-40 h-40 sm:w-64 sm:h-64 md:w-100 md:h-100 lg:w-125 lg:h-125 rounded-full blur-[80px] sm:blur-[120px] md:blur-[150px] opacity-30 -bottom-[10%] sm:-bottom-[15%] md:-bottom-[20%] -right-[5%] sm:-right-[8%] md:-right-[10%] bg-linear-to-br from-cyan-400 to-violet-500" />
+        <div className="absolute w-64 h-32 sm:w-125 sm:h-62.5 md:w-150 md:h-75 lg:w-200 lg:h-100 rounded-full blur-[100px] sm:blur-[150px] md:blur-[200px] opacity-15 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-yellow-400" />
         {[...Array(20)].map((_, i) => (
           <div
             key={i}

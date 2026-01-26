@@ -32,7 +32,6 @@ const baseRoutesWithoutChrome = [
   '/404',
 ]
 
-const routesWithoutNavbar = new Set(baseRoutesWithoutChrome)
 const routesWithoutFooter = new Set([
   ...baseRoutesWithoutChrome
 ])
@@ -46,7 +45,6 @@ function RootComponent() {
     select: (state) => state.location.pathname,
   })
 
-  const showNavbar = !routesWithoutNavbar.has(pathname)
   const showFooter = !routesWithoutFooter.has(pathname)
 
   return (
