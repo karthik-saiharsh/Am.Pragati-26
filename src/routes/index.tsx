@@ -8,7 +8,7 @@ export const Route = createFileRoute('/')({
 
 function App() {
   return (
-    <div className="text-center">
+    <div className="text-center overflow-x-hidden">
       <header className="min-h-screen flex flex-col items-center justify-center bg-[#282c34] text-white text-[calc(10px+2vmin)]">
         <img
           src={logo}

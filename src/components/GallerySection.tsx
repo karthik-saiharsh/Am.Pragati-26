@@ -2,7 +2,6 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Sparkles } from 'lucide-react'
 
-// Retro Synthwave Color Palette (matching PRAGATI'26 theme)
 const THEME = {
   bg: '#0f0f2e',
   bgLight: '#1a1a3e',
@@ -16,7 +15,6 @@ const THEME = {
   violet: '#9400D3',
 }
 
-// Gallery images - 2 rows of 6 images each
 const row1Images = [
   { id: 1, src: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=500&h=400&fit=crop', caption: 'Opening Night', color: THEME.pink },
   { id: 2, src: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=500&h=400&fit=crop', caption: 'Main Stage', color: THEME.cyan },
@@ -40,7 +38,6 @@ type ImageType = (typeof row1Images)[0]
 
 const DISCO_COLORS = [THEME.pink, THEME.gold, THEME.cyan, THEME.magenta, THEME.teal, THEME.purple]
 
-// Colorful 3D Disco Ball
 function ColorfulDiscoBall({ phase }: { phase: Phase }) {
   return (
     <motion.div
@@ -119,14 +116,12 @@ function ExplosionParticles({ active }: { active: boolean }) {
   )
 }
 
-// Polaroid Card - receives dynamic scale from parent
+// Polaroid Card
 function PolaroidCard({ 
   image, 
-  onClick, 
   cardRef,
 }: { 
   image: ImageType
-  onClick: () => void
   cardRef: (el: HTMLDivElement | null) => void
 }) {
   const rotation = useRef(-4 + Math.random() * 8).current
@@ -135,8 +130,7 @@ function PolaroidCard({
   return (
     <div 
       ref={cardRef}
-      className="flex-shrink-0 cursor-pointer group relative pt-10 polaroid-card" 
-      onClick={onClick}
+      className="flex-shrink-0 group relative pt-10 polaroid-card" 
       data-color={image.color}
     >
       {/* Rope/String */}
@@ -189,16 +183,6 @@ function PolaroidCard({
               alt={image.caption}
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
             />
-            <div
-              className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
-              style={{ background: `linear-gradient(135deg, ${image.color}60, ${THEME.bg}80)` }}
-            >
-              <div className="w-12 h-12 rounded-full bg-white/90 flex items-center justify-center">
-                <svg className="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
-                </svg>
-              </div>
-            </div>
           </div>
         </div>
         <div
@@ -214,11 +198,9 @@ function PolaroidCard({
 function InfiniteScrollRow({
   images,
   direction,
-  onImageClick,
 }: {
   images: ImageType[]
   direction: 'left' | 'right'
-  onImageClick: (img: ImageType) => void
 }) {
   const duplicatedImages = [...images, ...images, ...images]
   const containerRef = useRef<HTMLDivElement>(null)
@@ -246,7 +228,7 @@ function InfiniteScrollRow({
     return () => window.removeEventListener('resize', updateContainerCache)
   }, [])
 
-  // Update card scales based on position - optimized with batched reads/writes
+  // Update card scales based on position
   const updateScales = useCallback(() => {
     const cache = containerCacheRef.current
     if (!cache) return
@@ -260,7 +242,6 @@ function InfiniteScrollRow({
       }
     })
 
-    // Batch write all styles
     cardData.forEach(({ card, cardCenterX }) => {
       const distanceFromCenter = Math.abs(cardCenterX - cache.centerX)
       const normalizedDistance = Math.min(distanceFromCenter / cache.maxDistance, 1)
@@ -268,12 +249,10 @@ function InfiniteScrollRow({
       const opacity = 1 - normalizedDistance * 0.4
       const zIndex = Math.round((1 - normalizedDistance) * 20)
 
-      // Use transform3d for GPU acceleration
       card.style.transform = `scale3d(${scale}, ${scale}, 1)`
       card.style.opacity = String(opacity)
       card.style.zIndex = String(zIndex)
 
-      // Enhanced shadow for center cards
       const frame = card.querySelector('.polaroid-frame > div') as HTMLElement
       if (frame) {
         const color = card.dataset.color || THEME.pink
@@ -286,9 +265,9 @@ function InfiniteScrollRow({
     })
   }, [])
 
-  // Animation loop - optimized with throttled scale updates
+  // Animation loop
   useEffect(() => {
-    const speed = 0.08 // Balanced speed
+    const speed = 0.08
     let lastTime = performance.now()
 
     const animate = (currentTime: number) => {
@@ -296,7 +275,6 @@ function InfiniteScrollRow({
       lastTime = currentTime
       frameCountRef.current++
 
-      // Update position
       if (direction === 'left') {
         positionRef.current -= speed * delta * 0.01
         if (positionRef.current <= -33.33) {
@@ -309,12 +287,10 @@ function InfiniteScrollRow({
         }
       }
 
-      // Apply transform with GPU acceleration
       if (trackRef.current) {
         trackRef.current.style.transform = `translate3d(${positionRef.current}%, 0, 0)`
       }
 
-      // Throttle scale updates to every 3rd frame for better performance
       if (frameCountRef.current % 3 === 0) {
         updateScales()
       }
@@ -366,7 +342,6 @@ function InfiniteScrollRow({
           <PolaroidCard 
             key={`${image.id}-${idx}`} 
             image={image} 
-            onClick={() => onImageClick(image)}
             cardRef={setCardRef(idx)}
           />
         ))}
@@ -375,64 +350,6 @@ function InfiniteScrollRow({
   )
 }
 
-// Lightbox
-function Lightbox({ image, onClose }: { image: ImageType | null; onClose: () => void }) {
-  if (!image) return null
-
-  return (
-    <motion.div
-      className="fixed inset-0 backdrop-blur-xl flex items-center justify-center z-[1000] p-8"
-      style={{ background: `${THEME.bg}ee` }}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      onClick={onClose}
-    >
-      <motion.div
-        className="relative"
-        initial={{ scale: 0.5, y: 100 }}
-        animate={{ scale: 1, y: 0 }}
-        exit={{ scale: 0.3, y: 200, opacity: 0 }}
-        transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <button
-          className="absolute -top-12 right-0 w-10 h-10 rounded-full text-white flex items-center justify-center cursor-pointer transition-all duration-300 hover:rotate-90 hover:scale-110"
-          style={{ background: image.color, boxShadow: `0 0 20px ${image.color}` }}
-          onClick={onClose}
-        >
-          <X size={20} />
-        </button>
-
-        <div
-          className="absolute -top-5 left-1/2 -translate-x-1/2 w-8 h-12 rounded-t-md z-10"
-          style={{ background: image.color, boxShadow: `0 4px 15px ${image.color}60` }}
-        />
-
-        <div
-          className="bg-white p-5 max-w-[85vw]"
-          style={{ boxShadow: `0 30px 80px rgba(0,0,0,0.5), 0 0 150px ${image.color}30` }}
-        >
-          <img
-            src={image.src.replace('w=500&h=400', 'w=1000&h=800')}
-            alt={image.caption}
-            className="max-w-full max-h-[65vh] object-contain"
-          />
-          <div className="text-center pt-5">
-            <span className="block text-4xl font-semibold text-gray-800" style={{ fontFamily: "'Caveat', cursive" }}>
-              {image.caption}
-            </span>
-            <div className="inline-flex items-center gap-2 text-xs tracking-[0.15em] mt-2" style={{ color: THEME.gold }}>
-              <Sparkles className="w-4 h-4" />
-              <span>PRAGATI&apos;26 • RADIANCE</span>
-              <Sparkles className="w-4 h-4" />
-            </div>
-          </div>
-        </div>
-      </motion.div>
-    </motion.div>
-  )
-}
 
 // Inline keyframe styles
 const keyframeStyles = `
@@ -463,7 +380,6 @@ const keyframeStyles = `
 // Main Gallery Section
 export function GallerySection() {
   const [phase, setPhase] = useState<Phase>('loading')
-  const [selectedImage, setSelectedImage] = useState<ImageType | null>(null)
   const [hasAnimated, setHasAnimated] = useState(false)
   const sectionRef = useRef<HTMLElement>(null)
 
@@ -501,7 +417,7 @@ export function GallerySection() {
   return (
     <>
       <style>{keyframeStyles}</style>
-      <section ref={sectionRef} className="relative min-h-[750px] overflow-hidden py-12" style={{ background: THEME.bg }}>
+      <section ref={sectionRef} className="relative min-h-[750px] overflow-hidden overflow-x-hidden py-12" style={{ background: THEME.bg, overflowX: 'clip' }}>
         {/* Background Effects */}
         <div className="absolute inset-0 pointer-events-none">
           <div
@@ -591,17 +507,13 @@ export function GallerySection() {
 
               {/* Infinite Scroll Rows */}
               <div className="space-y-6">
-                <InfiniteScrollRow images={row1Images} direction="left" onImageClick={setSelectedImage} />
-                <InfiniteScrollRow images={row2Images} direction="right" onImageClick={setSelectedImage} />
+                <InfiniteScrollRow images={row1Images} direction="left" />
+                <InfiniteScrollRow images={row2Images} direction="right" />
               </div>
             </motion.div>
           )}
         </AnimatePresence>
 
-        {/* Lightbox */}
-        <AnimatePresence>
-          {selectedImage && <Lightbox image={selectedImage} onClose={() => setSelectedImage(null)} />}
-        </AnimatePresence>
       </section>
     </>
   )
