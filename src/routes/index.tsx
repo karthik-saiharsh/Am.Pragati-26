@@ -1,4 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
+import GallerySection from '@/components/GallerySection'
 import HeroSection from '@/components/hero-section'
 import Navbar from '@/components/Navbar'
 
@@ -13,6 +14,7 @@ function App() {
       <HeroSection />
       {/* Other sections go here
       like About, Events, Team, Sponsors, FAQ, Footer */}
+      <GallerySection />
     </div>
   )
 }
