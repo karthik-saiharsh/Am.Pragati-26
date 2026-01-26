@@ -58,7 +58,6 @@ function ColorfulDiscoBall({ phase }: { phase: Phase }) {
   )
 }
 
-// Explosion Particles
 function ExplosionParticles({ active }: { active: boolean }) {
   if (!active) return null
 
@@ -86,7 +85,15 @@ function ExplosionParticles({ active }: { active: boolean }) {
   )
 }
 
-// Polaroid Card
+const getImageAnimationParams = (id: number) => {
+  const seed = id * 1.618033988749895
+  return {
+    rotation: -4 + (seed % 8),
+    swingDelay: (seed * 0.7) % 2,
+    swingDuration: 3 + (seed * 0.5) % 2,
+  }
+}
+
 function PolaroidCard({ 
   image, 
   cardRef,
@@ -94,48 +101,86 @@ function PolaroidCard({
   image: ImageType
   cardRef: (el: HTMLDivElement | null) => void
 }) {
-  const rotation = useRef(-4 + Math.random() * 8).current
+  const { rotation, swingDelay, swingDuration } = getImageAnimationParams(image.id)
 
   return (
     <div 
       ref={cardRef}
-      className="flex-shrink-0 group relative pt-10 polaroid-card transition-all duration-100 will-change-transform"
+      className="flex-shrink-0 group relative pt-6 polaroid-card will-change-transform"
       data-color-class={image.colorClass}
+      style={{
+        transformOrigin: 'top center',
+        backfaceVisibility: 'hidden',
+        WebkitBackfaceVisibility: 'hidden',
+      }}
     >
-      {/* Rope/String */}
-      <div className="absolute left-1/2 -translate-x-1/2 w-0.5 -top-3 h-12 sm:h-14 bg-gradient-to-b from-amber-600 via-amber-700/85 to-amber-700/50 shadow-sm" />
-
-      {/* Clip */}
-      <div className="absolute top-8 left-1/2 -translate-x-1/2 z-20">
-        <div className={`w-5 h-8 sm:w-6 sm:h-10 rounded-t-md relative ${image.colorClass} shadow-lg`}>
-          <div className="absolute top-2 left-1 right-1 h-2 sm:h-3 bg-gradient-to-r from-black/15 via-transparent to-black/15" />
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3 sm:w-4 h-1 bg-black/20 rounded-t" />
-        </div>
-        <div className={`w-2.5 h-2.5 sm:w-3 sm:h-3 mx-auto -mt-px rounded-b ${image.colorClass} shadow-md`} />
-      </div>
-
-      {/* Polaroid Frame */}
       <motion.div
-        className="relative mt-4 group-hover:z-50 polaroid-frame"
-        style={{ transform: `rotate(${rotation}deg)` }}
-        whileHover={{ rotate: 0, scale: 1.05 }}
+        animate={{
+          rotate: [-2, 2, -2],
+        }}
+        transition={{
+          duration: swingDuration,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: swingDelay,
+        }}
+        style={{ transformOrigin: 'top center' }}
       >
-        <div className="bg-white p-2 sm:p-3 shadow-xl w-48 sm:w-56 md:w-64 lg:w-72">
-          <div className="relative aspect-[4/3] overflow-hidden bg-gray-900">
-            <img
-              src={image.src}
-              alt={image.caption}
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-            />
-          </div>
+        <div 
+          className="thread-container absolute left-1/2 -translate-x-1/2 z-10"
+          style={{
+            top: 'calc(-3.5rem - var(--thread-extra, 0px))',
+            height: 'calc(4.5rem + var(--thread-extra, 0px))',
+          }}
+        >
+          <div className="w-0.5 h-full bg-amber-700 rounded-full" />
         </div>
-        <div className="absolute -bottom-4 left-[10%] right-[10%] h-4 sm:h-6 blur-lg opacity-50 bg-gradient-radial from-black/40 to-transparent" />
+        
+        <motion.div
+          className="relative group-hover:z-50 polaroid-frame"
+          style={{ transform: `rotate(${rotation}deg)` }}
+          whileHover={{ rotate: 0, scale: 1.05 }}
+        >
+          <div 
+            className="p-2 sm:p-3 shadow-xl w-48 sm:w-56 md:w-64 lg:w-72 relative pt-4 sm:pt-5"
+            style={{
+              backgroundColor: '#e8dcc8',
+              boxShadow: 'inset 0 0 20px rgba(139, 90, 43, 0.15), 0 4px 20px rgba(0,0,0,0.3)',
+            }}
+          >
+
+            <div className="absolute top-4 sm:top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
+              <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-black shadow-[inset_0_2px_4px_rgba(0,0,0,0.8)]" />
+              <div className="absolute inset-0 rounded-full border border-gray-300" />
+            </div>
+            
+            <div className="absolute top-4 sm:top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 rotate-45">
+              <div className="relative">
+                <div className="w-5 h-3 sm:w-6 sm:h-4 relative">
+                  <div className="absolute left-0 top-0 w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-full border-2 sm:border-[3px] bg-transparent" 
+                       style={{ borderColor: '#b45309' }} />
+                  <div className="absolute right-0 top-0 w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-full border-2 sm:border-[3px] bg-transparent"
+                       style={{ borderColor: '#d97706' }} />
+                  <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-gradient-to-br from-amber-500 via-amber-700 to-amber-900 shadow-sm" />
+                </div>
+              </div>
+            </div>
+            
+            <div className="relative aspect-[4/3] overflow-hidden bg-gray-900 mt-3 sm:mt-4">
+              <img
+                src={image.src}
+                alt={image.caption}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              />
+            </div>
+          </div>
+          <div className="absolute -bottom-4 left-[10%] right-[10%] h-4 sm:h-6 blur-lg opacity-50 bg-gradient-radial from-black/40 to-transparent" />
+        </motion.div>
       </motion.div>
     </div>
   )
 }
 
-// Infinite Scroll
 function InfiniteScrollRow({
   images,
   direction,
@@ -168,12 +213,10 @@ function InfiniteScrollRow({
     return () => window.removeEventListener('resize', updateContainerCache)
   }, [])
 
-  // Update card scales based on position
   const updateScales = useCallback(() => {
     const cache = containerCacheRef.current
     if (!cache) return
 
-    // Read all card positions first
     const cardData: { card: HTMLDivElement; cardCenterX: number }[] = []
     cardRefs.current.forEach((card) => {
       if (card) {
@@ -187,11 +230,14 @@ function InfiniteScrollRow({
       const normalizedDistance = Math.min(distanceFromCenter / cache.maxDistance, 1)
       const scale = 1.15 - normalizedDistance * 0.45
       const opacity = 1 - normalizedDistance * 0.4
-      const zIndex = Math.round((1 - normalizedDistance) * 20)
+      const zIndex = Math.floor((1 - normalizedDistance) * 20)
 
-      card.style.transform = `scale3d(${scale}, ${scale}, 1)`
-      card.style.opacity = String(opacity)
+      card.style.transform = `scale3d(${scale.toFixed(4)}, ${scale.toFixed(4)}, 1) translateZ(0)`
+      card.style.opacity = opacity.toFixed(4)
       card.style.zIndex = String(zIndex)
+      
+      const threadExtra = normalizedDistance * 60
+      card.style.setProperty('--thread-extra', `${threadExtra.toFixed(2)}px`)
 
       const frame = card.querySelector('.polaroid-frame > div') as HTMLElement
       if (frame) {
@@ -206,9 +252,8 @@ function InfiniteScrollRow({
     })
   }, [])
 
-  // Animation loop
   useEffect(() => {
-    const speed = 0.08
+    const speed = 0.15
     let lastTime = performance.now()
 
     const animate = (currentTime: number) => {
@@ -218,23 +263,17 @@ function InfiniteScrollRow({
 
       if (direction === 'left') {
         positionRef.current -= speed * delta * 0.01
-        if (positionRef.current <= -33.33) {
-          positionRef.current = 0
-        }
+        positionRef.current = ((positionRef.current % 33.33) + 33.33) % 33.33 - 33.33
       } else {
         positionRef.current += speed * delta * 0.01
-        if (positionRef.current >= 0) {
-          positionRef.current = -33.33
-        }
+        positionRef.current = ((positionRef.current % 33.33) + 33.33) % 33.33 - 33.33
       }
 
       if (trackRef.current) {
         trackRef.current.style.transform = `translate3d(${positionRef.current}%, 0, 0)`
       }
 
-      if (frameCountRef.current % 3 === 0) {
-        updateScales()
-      }
+      updateScales()
 
       animationRef.current = requestAnimationFrame(animate)
     }
@@ -254,7 +293,6 @@ function InfiniteScrollRow({
 
   return (
     <div className="relative overflow-hidden py-4 sm:py-6 md:py-8" ref={containerRef}>
-      {/* Horizontal Rope Line */}
       <div className="absolute top-0 left-0 right-0 h-1 z-10 bg-gradient-to-r from-transparent via-amber-700/90 to-transparent shadow-md" />
 
       <div className="absolute inset-y-0 left-0 w-16 sm:w-24 md:w-40 z-30 pointer-events-none bg-gradient-to-r from-[#0f0f2e] via-[#0f0f2e]/80 to-transparent" />
