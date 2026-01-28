@@ -17,13 +17,7 @@ const aboutSections = [
 	},
 ];
 
-interface AboutSectionProps {
-	title: string;
-	content: string;
-	isFirst?: boolean;
-}
-
-const AboutSection = ({ title, content, isFirst = false }: AboutSectionProps) => {
+const About = () => {
 	const containerRef = useRef<HTMLDivElement>(null);
 
 	const { scrollYProgress } = useScroll({
@@ -31,59 +25,65 @@ const AboutSection = ({ title, content, isFirst = false }: AboutSectionProps) =>
 		offset: ["start start", "end end"],
 	});
 
-	// Computer scale: grows from 1 to 3 as user scrolls (0% to 40% of scroll)
-	const computerScale = useTransform(scrollYProgress, [0, 0.4], [1, 3]);
+	// Computer scale: grows from 1 to 3 as user scrolls (0% to 15% of scroll)
+	const computerScale = useTransform(scrollYProgress, [0, 0.15], [1, 3]);
 
-	// Black overlay opacity: fades in from 0 to 1 (20% to 50% of scroll)
-	const blackOverlayOpacity = useTransform(scrollYProgress, [0.2, 0.5], [0, 1]);
+	// Black overlay opacity: fades in from 0 to 1 (8% to 20% of scroll)
+	const blackOverlayOpacity = useTransform(scrollYProgress, [0.08, 0.2], [0, 1]);
 
-	// About text opacity: fades in (50% to 60%) and fades out (85% to 100%)
-	const aboutTextOpacity = useTransform(
-		scrollYProgress,
-		[0.5, 0.6, 0.85, 1],
-		[0, 1, 1, 0],
-	);
+	// Section 1 opacity and Y (About ASB) - 18% to 40%
+	const section1Opacity = useTransform(scrollYProgress, [0.18, 0.25, 0.35, 0.42], [0, 1, 1, 0]);
+	const section1Y = useTransform(scrollYProgress, [0.18, 0.25], [50, 0]);
 
-	// About text Y position: slides up as it appears
-	const aboutTextY = useTransform(scrollYProgress, [0.5, 0.65], [50, 0]);
+	// Section 2 opacity and Y (About PRAGATI) - 40% to 65%
+	const section2Opacity = useTransform(scrollYProgress, [0.40, 0.47, 0.58, 0.65], [0, 1, 1, 0]);
+	const section2Y = useTransform(scrollYProgress, [0.40, 0.47], [50, 0]);
+
+	// Section 3 opacity and Y (About Amrita) - 63% to 90%
+	const section3Opacity = useTransform(scrollYProgress, [0.63, 0.70, 0.85, 0.95], [0, 1, 1, 0]);
+	const section3Y = useTransform(scrollYProgress, [0.63, 0.70], [50, 0]);
+
+	const sectionAnimations = [
+		{ opacity: section1Opacity, y: section1Y },
+		{ opacity: section2Opacity, y: section2Y },
+		{ opacity: section3Opacity, y: section3Y },
+	];
 
 	return (
-		<div ref={containerRef} className="relative h-[200vh]">
+		<div ref={containerRef} className="relative h-[400vh]">
 			{/* Sticky container that stays in view during scroll */}
 			<div className="sticky top-0 w-screen h-screen overflow-hidden">
 				{/* Background scene */}
 				<section className="relative w-full h-full bg-black bg-[url(about/bg.webp)] bg-cover bg-no-repeat bg-center overflow-hidden">
 					{/* Computer container with scale animation */}
-					{isFirst && (
-						<motion.div
-							className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[300px] md:w-[400px] lg:w-[1100px] origin-center"
-							style={{ scale: computerScale }}
-						>
-							{/* Computer image */}
-							<img
-								src="/about/comp.webp"
-								alt="Retro computer"
-								className="w-full h-auto"
-							/>
-							{/* "About us" text on the screen */}
-							<div className="absolute top-[12%] left-[15%] w-[70%] h-[40%] flex items-center justify-center">
-								<span
-									className="text-white text-2xl md:text-3xl lg:text-6xl font-bold tracking-wider font-jersey15"
-									style={{
-										textShadow:
-											"-2px -2px 0px #ff0000, 2px 2px 0px #00ffff",
-									}}
-								>
-									About Us
-								</span>
-							</div>
-						</motion.div>
-					)}
+					<motion.div
+						className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[300px] md:w-[400px] lg:w-[1100px] origin-center"
+						style={{ scale: computerScale }}
+					>
+						{/* Computer image */}
+						<img
+							src="/about/comp.webp"
+							alt="Retro computer"
+							className="w-full h-auto"
+						/>
+						{/* "About us" text on the screen */}
+						<div className="absolute top-[12%] left-[15%] w-[70%] h-[40%] flex items-center justify-center">
+							<span
+								className="text-white text-2xl md:text-3xl lg:text-6xl font-bold tracking-wider font-jersey15"
+								style={{
+									textShadow:
+										"-2px -2px 0px #ff0000, 2px 2px 0px #00ffff",
+								}}
+							>
+								About Us
+							</span>
+						</div>
+					</motion.div>
 
 					{/* FaultyTerminal background overlay */}
 					<motion.div
 						className="absolute inset-0 pointer-events-none"
-						style={{ opacity: isFirst ? blackOverlayOpacity : 1 }}
+						style={{ opacity: blackOverlayOpacity }}
 					>
 						<FaultyTerminal
 							scale={2.0}
@@ -107,44 +107,35 @@ const AboutSection = ({ title, content, isFirst = false }: AboutSectionProps) =>
 						/>
 					</motion.div>
 
-					{/* About Us text content */}
-					<motion.div
-						className="absolute inset-0 flex items-center justify-center px-8 md:px-16 lg:px-32"
-						style={{ opacity: aboutTextOpacity, y: aboutTextY }}
-					>
-						<div className="max-w-4xl text-center bg-black/50 backdrop-blur-[4px] backdrop-saturate-200 rounded-3xl p-5 border border-[#00ffff]">
-							<h2
-								className="text-3xl text-white md:text-4xl lg:text-6xl font-bold text-green-400 mb-8 font-jersey15"
-								style={{
-									textShadow:
-										"-2px -2px 0px #ff0000, 2px 2px 0px #00ffff",
-								}}
-							>
-								{title}
-							</h2>
-							<p className="text-gray-300 text-balance md:text-lg lg:text-xl leading-relaxed font-jersey15">
-								{content}
-							</p>
-						</div>
-					</motion.div>
+					{/* About sections - all in the same sticky container */}
+					{aboutSections.map((section, index) => (
+						<motion.div
+							key={section.title}
+							className="absolute inset-0 flex items-center justify-center px-8 md:px-16 lg:px-32"
+							style={{
+								opacity: sectionAnimations[index].opacity,
+								y: sectionAnimations[index].y,
+							}}
+						>
+							<div className="max-w-4xl text-center bg-black/50 backdrop-blur-[4px] backdrop-saturate-200 rounded-3xl p-5 border border-[#00ffff]">
+								<h2
+									className="text-3xl text-white md:text-4xl lg:text-6xl font-bold text-green-400 mb-8 font-jersey15"
+									style={{
+										textShadow:
+											"-2px -2px 0px #ff0000, 2px 2px 0px #00ffff",
+									}}
+								>
+									{section.title}
+								</h2>
+								<p className="text-gray-300 text-balance md:text-lg lg:text-xl leading-relaxed font-jersey15">
+									{section.content}
+								</p>
+							</div>
+						</motion.div>
+					))}
 				</section>
 			</div>
 		</div>
-	);
-};
-
-const About = () => {
-	return (
-		<>
-			{aboutSections.map((section, index) => (
-				<AboutSection
-					key={section.title}
-					title={section.title}
-					content={section.content}
-					isFirst={index === 0}
-				/>
-			))}
-		</>
 	);
 };
 

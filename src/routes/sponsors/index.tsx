@@ -12,7 +12,7 @@ function SponsorsPage() {
   return (
     <section className="w-screen h-screen bg-black select-none overflow-hidden">
       <div className="absolute overflow-y-scroll w-full h-screen bg-black/30 flex flex-col items-center backdrop-blur-[5px] z-10">
-        <div className="absolute inset-0 w-full h-[153vh] pointer-events-none">
+        <div className="absolute inset-0 w-full h-[153vh] max-lg:h-[180vh] pointer-events-none">
           <Noise
             patternSize={50}
             patternScaleX={10}
@@ -47,21 +47,21 @@ function SponsorsPage() {
           initial={{ translateY: 120, opacity: 0 }}
           animate={{ translateY: 0, opacity: 1 }}
           transition={{ duration: 1, ease: "easeInOut", delay: 1.2 }}
-          className="relative w-12/15 max-w-4xl my-8"
+          className="relative w-12/15 max-w-4xl my-8 max-lg:w-[85%] max-lg:max-w-md"
         >
           <img
             src="sponsors-page/card-long.png"
             alt=""
-            className="w-full h-auto scale-y-[1.2]"
+            className="w-full h-auto lg:scale-y-[1.2] max-lg:rotate-90 max-lg:scale-y-[2] max-lg:scale-x-[1.3] max-lg:my-[50%]"
           />
-          <div className="absolute inset-0 flex justify-center items-center gap-6 px-12 py-10">
+          <div className="absolute inset-0 flex justify-center items-center gap-6 px-12 py-10 max-lg:flex-col max-lg:px-6 max-lg:py-8 max-lg:gap-4">
             <img
               src="sponsors-page/bny.jpeg"
               alt="BNY Logo"
-              className="w-45 h-auto object-contain rounded-xl shrink-0"
+              className="w-45 h-auto object-contain rounded-xl shrink-0 max-lg:w-32"
             />
-            <div className="flex flex-col gap-4 pr-4 -translate-y-2">
-              <p className="text-white text-base font-jersey leading-relaxed">
+            <div className="flex h-fit flex-col gap-4 pr-4 max-lg:w-[70%] max-lg:translate-x-2 -translate-y-2 max-lg:pr-0 max-lg:translate-y-0 max-lg:text-center max-lg:overflow-y-auto max-lg:max-h-[60%]">
+              <p className="text-white text-base font-jersey leading-relaxed max-lg:text-sm">
                 BNY is a global financial services platforms company and the
                 world's largest custodian bank. Founded in 1784 by Alexender
                 Hamilton. BNY supports how capital moves, settles, and stays
@@ -73,7 +73,7 @@ function SponsorsPage() {
                 one team
               </p>
 
-              <p className="text-white text-base font-jersey leading-relaxed">
+              <p className="text-white text-base font-jersey leading-relaxed max-lg:text-sm">
                 Amrita School of Business shares a strong and growing
                 association with BNY. Over the years, BNY has actively supported
                 Amrita students through meaningful internship opportunities,
@@ -107,13 +107,25 @@ function SponsorsPage() {
         </div>
       </div>
 
+      {/* Desktop video */}
       <video
-        className="absolute top-0 left-0 z-0 w-screen h-[110vh] min-w-full min-h-full max-w-none"
+        className="hidden lg:block absolute top-0 left-0 z-0 w-screen h-[110vh] min-w-full min-h-full max-w-none"
         autoPlay
         loop
         muted
       >
         <source src="sponsors-page/bg-night.webm" type="video/webm" />
+        Video Playback not supported!
+      </video>
+
+      {/* Mobile/Tablet video */}
+      <video
+        className="lg:hidden absolute top-0 left-0 z-0 w-screen h-[110vh] min-w-full min-h-full max-w-none"
+        autoPlay
+        loop
+        muted
+      >
+        <source src="sponsors-page/bg-night-mobile.webm" type="video/mp4" />
         Video Playback not supported!
       </video>
     </section>
