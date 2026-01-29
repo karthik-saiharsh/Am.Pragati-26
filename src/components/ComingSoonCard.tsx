@@ -44,7 +44,7 @@ export default function ComingSoonCard({
 	eventTitle = "PRAGATI '26",
 	subtitle = "COMING SOON",
 	avatarSrc = "https://speugdv1vi.ufs.sh/f/y8q1VPJuKeA15lDZB7A8rw7ncvuMsAbNajoyg3PxkVXmhJ1p",
-	backgroundSrc = "https://speugdv1vi.ufs.sh/f/y8q1VPJuKeA1NLaAdJHmqkl0bXdSA3toVy62LrUIvQhGaWuc",
+	backgroundSrc = "https://speugdv1vi.ufs.sh/f/y8q1VPJuKeA1cTVlnXeX8hDe73ritmZAEkpSBVFowYx2vRLc",
 }: ComingSoonCardProps) {
 	return (
 		<div
