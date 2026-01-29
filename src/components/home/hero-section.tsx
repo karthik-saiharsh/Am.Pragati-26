@@ -77,7 +77,7 @@ function HeroSection() {
 	];
 
 	return (
-		<section className="relative min-h-screen h-screen w-full flex flex-col items-center">
+		<section className="relative min-h-screen h-screen max-w-screen w-full flex flex-col items-center">
 			{/* Background Image */}
 			<div
 				className="absolute inset-0 z-0 bg-cover bg-position-[center_top] md:bg-center bg-no-repeat"
@@ -157,14 +157,14 @@ function HeroSection() {
 						transition={{ duration: 0.8, type: "spring", bounce: 0.5 }}
 						className="relative flex-none text-center"
 					>
-						<h1 className="font-jersey15 text-[90px] md:text-[180px] lg:text-[240px] text-retro-yellow drop-shadow-[3px_3px_0px_rgba(168,85,247,0.8)] md:drop-shadow-[4px_4px_0px_rgba(168,85,247,0.8)] tracking-tighter uppercase leading-none select-none">
+						<h1 className="font-jersey15 text-[90px] md:text-[160px] lg:text-[200px] xl:text-[240px] text-retro-yellow drop-shadow-[3px_3px_0px_rgba(168,85,247,0.8)] md:drop-shadow-[4px_4px_0px_rgba(168,85,247,0.8)] tracking-tighter uppercase leading-none select-none">
 							Pragati '26
 						</h1>
 
 						<motion.img
 							src="/radience-text.png"
 							alt="Radiance"
-							className="absolute -bottom-6 -right-8 w-32 md:w-64 lg:w-96 md:-bottom-10 md:-right-10 lg:-bottom-16 lg:-right-20 transform -rotate-3 filter drop-shadow-lg pointer-events-none"
+							className="absolute -bottom-7 -right-4 w-32 md:w-64 lg:w-96 md:-bottom-10 md:-right-10 lg:-bottom-16 lg:-right-20 transform -rotate-3 filter drop-shadow-lg pointer-events-none"
 							initial={{ scale: 0, rotate: -10 }}
 							animate={{ scale: 1, rotate: -3 }}
 							transition={{ delay: 0.3, type: "spring" }}
@@ -173,7 +173,7 @@ function HeroSection() {
 
 					{/* Typewriter Filler Text */}
 					{/* FIX: mt-12 for Mobile (small gap), mt-32 for Desktop (huge gap) */}
-					<div className="mt-12 md:mt-32 flex flex-col items-center justify-center">
+					<div className="mt-12 md:mt-16 lg:mt-20 xl:mt-28 flex flex-col items-center justify-center">
 						<div className="bg-black/60 backdrop-blur-sm border border-retro-cyan/30 rounded-lg px-4 py-3 md:px-8 md:py-4 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
 							<TypewriterText text="PRESS EXPLORE TO UNLOCK" />
 							<div className="h-2" />
@@ -186,7 +186,7 @@ function HeroSection() {
 						initial={{ opacity: 0, scale: 0.8 }}
 						animate={{ opacity: 1, scale: 1 }}
 						transition={{ delay: 2.5, duration: 0.5 }}
-						className="mt-8 md:mt-12 flex-none"
+						className="mt-8 md:mt-12 lg:mt-16 xl:mt-20 flex-none"
 					>
 						<motion.button
 							whileHover={{ y: -2 }}
