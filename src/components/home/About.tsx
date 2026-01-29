@@ -4,61 +4,61 @@ import { useRef } from "react";
 import LetterGlitch from "./LetterGlitch";
 
 const aboutSections = [
-  {
-    title: "About ASB",
-    content: `Amrita School of Business (ASB), Coimbatore is an elite management institution with a legacy of 30 years. The institution is accredited with AACSB (Association to Advance Collegiate Schools of Business), recognized to be top 5% of business schools around the world. It is also placed 26th in the NIRF Management Institution ranking (2025). With a unique blend of academic excellence and human values, ASB encapsulates in the philosophy "Education for life and Education for living".`,
-  },
-  {
-    title: "About PRAGATI",
-    content: `PRAGATI is the flagship annual B-fest hosted by the students of Amrita School of Business, where theory meets practice through intense business-themed competitions across the domains of marketing, finance, HR, operations, and analytics. We celebrate the timeless glow of businesses that shaped our economy, under the theme - Radiance. It's a tribute to the leaders that redefined the future of India.`,
-  },
-  {
-    title: "About Amrita Vishwa Vidyapeetham",
-    content: `Amrita Vishwa Vidyapeetham is a multi-disciplinary, research-centered university that stands as a beacon of world-class education in India. Ranked as the 8th best university in India by NIRF and awarded an A++ by NAAC, Amrita is driven by the visionary guidance of its Chancellor, Sri Mata Amritanandamayi Devi (Amma).`,
-  },
+	{
+		title: "About ASB",
+		content: `Amrita School of Business (ASB), Coimbatore is an elite management institution with a legacy of 30 years. The institution is accredited with AACSB (Association to Advance Collegiate Schools of Business), recognized to be top 5% of business schools around the world. It is also placed 26th in the NIRF Management Institution ranking (2025). With a unique blend of academic excellence and human values, ASB encapsulates in the philosophy "Education for life and Education for living".`,
+	},
+	{
+		title: "About PRAGATI",
+		content: `PRAGATI is the flagship annual B-fest hosted by the students of Amrita School of Business, where theory meets practice through intense business-themed competitions across the domains of marketing, finance, HR, operations, and analytics. We celebrate the timeless glow of businesses that shaped our economy, under the theme - Radiance. It's a tribute to the leaders that redefined the future of India.`,
+	},
+	{
+		title: "About Amrita Vishwa Vidyapeetham",
+		content: `Amrita Vishwa Vidyapeetham is a multi-disciplinary, research-centered university that stands as a beacon of world-class education in India. Ranked as the 8th best university in India by NIRF and awarded an A++ by NAAC, Amrita is driven by the visionary guidance of its Chancellor, Sri Mata Amritanandamayi Devi (Amma).`,
+	},
 ];
 
 const About = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
+	const containerRef = useRef<HTMLDivElement>(null);
 
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"],
-  });
+	const { scrollYProgress } = useScroll({
+		target: containerRef,
+		offset: ["start start", "end end"],
+	});
 
-  const computerScale = useTransform(scrollYProgress, [0, 0.15], [1, 3]);
-  const blackOverlayOpacity = useTransform(
-    scrollYProgress,
-    [0.08, 0.2],
-    [0, 1],
-  );
-  const compImageOpacity = useTransform(scrollYProgress, [0.1, 0.2], [1, 0]);
+	const computerScale = useTransform(scrollYProgress, [0, 0.15], [1, 3]);
+	const blackOverlayOpacity = useTransform(
+		scrollYProgress,
+		[0.08, 0.2],
+		[0, 1],
+	);
+	const compImageOpacity = useTransform(scrollYProgress, [0.1, 0.2], [1, 0]);
 
-  const section1Opacity = useTransform(
-    scrollYProgress,
-    [0.18, 0.25, 0.35, 0.42],
-    [0, 1, 1, 0],
-  );
-  const section2Opacity = useTransform(
-    scrollYProgress,
-    [0.4, 0.47, 0.58, 0.65],
-    [0, 1, 1, 0],
-  );
-  const section3Opacity = useTransform(
-    scrollYProgress,
-    [0.63, 0.7, 0.85, 0.95],
-    [0, 1, 1, 0],
-  );
+	const section1Opacity = useTransform(
+		scrollYProgress,
+		[0.18, 0.25, 0.35, 0.42],
+		[0, 1, 1, 0],
+	);
+	const section2Opacity = useTransform(
+		scrollYProgress,
+		[0.4, 0.47, 0.58, 0.65],
+		[0, 1, 1, 0],
+	);
+	const section3Opacity = useTransform(
+		scrollYProgress,
+		[0.63, 0.7, 0.85, 0.95],
+		[0, 1, 1, 0],
+	);
 
-  const sectionAnimations = [
-    { opacity: section1Opacity },
-    { opacity: section2Opacity },
-    { opacity: section3Opacity },
-  ];
+	const sectionAnimations = [
+		{ opacity: section1Opacity },
+		{ opacity: section2Opacity },
+		{ opacity: section3Opacity },
+	];
 
-  return (
-    <div ref={containerRef} className="relative h-[450vh] bg-[#020502]">
-      <style>{`
+	return (
+		<div ref={containerRef} className="relative h-[450vh] bg-[#020502]">
+			<style>{`
         .win95-border {
           border: 4px solid;
           border-color: #dfdfdf #404040 #404040 #dfdfdf;
