@@ -81,7 +81,10 @@ function HeroSection() {
 			{/* Background Image */}
 			<div
 				className="absolute inset-0 z-0 bg-cover bg-position-[center_top] md:bg-center bg-no-repeat"
-				style={{ backgroundImage: "url('/herobg4.png')" }}
+				style={{
+					backgroundImage:
+						"url('https://speugdv1vi.ufs.sh/f/y8q1VPJuKeA1E0kiecIJlYT70Xc54kS3CBuQrR9HEGawoFDn')",
+				}}
 			>
 				<div className="absolute inset-0 bg-linear-to-b from-black/50 via-transparent to-black/20 md:hidden pointer-events-none" />
 			</div>
