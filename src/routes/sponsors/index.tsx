@@ -13,9 +13,9 @@ function SponsorsPage() {
   return (
     <>
       <Navbar />
-      <section className="w-screen h-screen bg-black select-none overflow-hidden">
-      <div className="absolute overflow-y-scroll w-full h-screen bg-black/30 flex flex-col items-center backdrop-blur-[5px] z-10 pt-24">
-        <div className="absolute inset-0 w-full h-[153vh] max-lg:h-[180vh] pointer-events-none">
+      <section className="w-screen min-h-screen bg-black select-none relative">
+      <div className="w-full min-h-screen bg-black/30 flex flex-col items-center backdrop-blur-[5px] z-10 pt-24 relative">
+        <div className="absolute inset-0 w-full min-h-full pointer-events-none">
           <Noise
             patternSize={50}
             patternScaleX={10}
@@ -41,7 +41,7 @@ function SponsorsPage() {
           initial={{ translateY: 120, opacity: 0 }}
           animate={{ translateY: 0, opacity: 1 }}
           transition={{ duration: 1, ease: "easeInOut", delay: 1 }}
-          className="text-[#33EBFF] text-5xl font-jersey text-shadow-[2px_2px_0px_#7b3aec] z-20 mt-10 mb-8"
+          className="text-[#33EBFF] text-5xl font-jersey text-shadow-[2px_2px_0px_#7b3aec] z-20 mt-10 mb-32 max-lg:mb-12"
         >
           Title Sponsor - BNY
         </motion.p>
@@ -99,12 +99,12 @@ function SponsorsPage() {
           Other Sponsors
         </motion.p>
 
-        <div className="w-full px-10 py-8 flex flex-wrap justify-center items-start gap-8 pb-20">
+        <div className="w-full px-10 py-8 flex flex-wrap justify-center items-start gap-8 pb-20 pt-16">
           {/* Other Sponsors */}
           <Card
             name="Banconus"
             img="sponsors-page/banconus.jpeg"
-            extraStyling="w-1/3"
+            extraStyling="w-2/5"
             appearDelay={1.6}
           />
         </div>
@@ -112,7 +112,7 @@ function SponsorsPage() {
 
       {/* Desktop video */}
       <video
-        className="hidden lg:block absolute top-0 left-0 z-0 w-screen h-[110vh] min-w-full min-h-full max-w-none"
+        className="hidden lg:block fixed top-0 left-0 z-0 w-screen h-screen object-cover"
         autoPlay
         loop
         muted
@@ -123,7 +123,7 @@ function SponsorsPage() {
 
       {/* Mobile/Tablet video */}
       <video
-        className="lg:hidden absolute top-0 left-0 z-0 w-screen h-[110vh] min-w-full min-h-full max-w-none"
+        className="lg:hidden fixed top-0 left-0 z-0 w-screen h-screen object-cover"
         autoPlay
         loop
         muted
