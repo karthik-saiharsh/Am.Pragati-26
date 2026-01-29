@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { Minus, Square, X } from "lucide-react";
 import type React from "react";
 import { cn } from "../lib/utils";
@@ -42,20 +43,23 @@ const RetroWindowWrapper = ({
 						type="button"
 						className="p-0.5 hover:bg-white/20 rounded-sm text-white/80 hover:text-white transition-colors"
 					>
-						<Minus size={12} strokeWidth={3} />
+						<Minus size={15} strokeWidth={3} />
 					</button>
 					<button
 						type="button"
 						className="p-0.5 hover:bg-white/20 rounded-sm text-white/80 hover:text-white transition-colors"
 					>
-						<Square size={10} strokeWidth={3} />
+						<Square size={13} strokeWidth={3} />
 					</button>
-					<button
-						type="button"
-						className="p-0.5 hover:bg-red-500 rounded-sm text-white/80 hover:text-white transition-colors"
-					>
-						<X size={12} strokeWidth={3} />
-					</button>
+					<Link to="/">
+						<button
+							title="Close" // tooltip fro now
+							type="button"
+							className="p-0.5 hover:bg-red-500 rounded-sm text-white/80 hover:text-white transition-colors"
+						>
+							<X size={15} strokeWidth={3} />
+						</button>
+					</Link>
 				</div>
 			</div>
 
