@@ -46,7 +46,7 @@ function RouteComponent() {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-linear-to-b from-[#000000] via-[#1a0b2e] to-black">
+      <div className="min-h-screen bg-linear-to-b from-[#000000] via-[#1a0b2e] to-black cursor-none">
         <div className="container mx-auto px-4 py-8">
           <EventDetail
             event={event}
