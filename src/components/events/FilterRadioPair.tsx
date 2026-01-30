@@ -2,8 +2,6 @@ interface FilterRadioPairProps {
 	a: string;
 	b: string;
 	value: string | null;
-	// Accept a plain function that receives the new string|null value.
-	// Callers will wrap their strongly-typed setters to match this signature.
 	setValue: (value: string | null) => void;
 }
 
