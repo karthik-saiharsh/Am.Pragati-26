@@ -1,27 +1,41 @@
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, User } from "lucide-react";
 import { useState } from "react";
 
 const mockTickets = [
 	{
 		event_id: "1",
 		event_name: "Tech Workshop 2026",
-		event_date: "2026-03-15",
-		event_time: "10:00 AM",
-		venue: "Main Hall, Building A",
+		event_type: "Workshop",
+		schedules: [
+			{ date: "2026-03-15", time: "10:00 AM - 12:00 PM", venue: "Main Hall, Building A" },
+			{ date: "2026-03-16", time: "2:00 PM - 4:00 PM", venue: "Lab 2, Building A" },
+		],
+		team_name: "Code Warriors",
+		price: 590
 	},
 	{
 		event_id: "2",
 		event_name: "Coding Championship",
-		event_date: "2026-03-20",
-		event_time: "2:00 PM",
-		venue: "Tech Center",
+		event_type: "Competition",
+		schedules: [
+			{ date: "2026-03-20", time: "2:00 PM - 6:00 PM", venue: "Tech Center" },
+		],
+		team_name: "Solo Entry",
+		price: 250
 	},
 	{
 		event_id: "3",
 		event_name: "AI Summit",
-		event_date: "2026-03-25",
-		event_time: "9:00 AM",
-		venue: "Conference Hall",
+		event_type: "Conference",
+		schedules: [
+			{ date: "2026-03-25", time: "9:00 AM - 11:00 AM", venue: "Conference Hall" },
+			{ date: "2026-03-25", time: "2:00 PM - 5:00 PM", venue: "Conference Hall" },
+			{ date: "2026-03-26", time: "10:00 AM - 1:00 PM", venue: "Auditorium" },
+			{ date: "2026-03-27", time: "10:00 AM - 1:00 PM", venue: "Auditorium" },
+
+		],
+		team_name: "Tech Innovators",
+		price: 1000
 	},
 ];
 
@@ -131,7 +145,6 @@ export default function TicketSection() {
 				</div>
 
 				{/* ========== TICKET CARD ========== */}
-				{/* Wrapped in the new container style but kept minimal padding to let ticket shine */}
 				<div className="bg-black/60 backdrop-blur-sm border border-retro-cyan/30 rounded-lg p-6 md:p-8 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
 					<div className="relative rounded-xl overflow-visible">
 						{/* Outer shadow & border for ticket itself */}
@@ -139,15 +152,21 @@ export default function TicketSection() {
 
 							{/* ---- HEADER BAR ---- */}
 							<div className="relative bg-[#1a0033] px-6 py-4 flex items-center justify-between border-b border-[#a855f7]/20">
-								{/* Event name */}
-								<h3 className="text-base md:text-xl font-bold text-white font-vcr uppercase tracking-widest truncate mr-4">
-									{currentTicket.event_name}
-								</h3>
+								{/* Event name and team */}
+								<div className="flex-1 mr-4">
+									<h3 className="text-base md:text-xl font-bold text-white font-vcr uppercase tracking-widest truncate">
+										{currentTicket.event_name}
+									</h3>
+									<p className="text-xs md:text-sm text-retro-cyan/70 font-vcr uppercase tracking-wider mt-1">
+										<User className="w-4 h-4 inline-block mr-2" />
+										{currentTicket.team_name}
+									</p>
+								</div>
 
-								{/* Registered badge */}
+								{/* Price badge */}
 								<div className="px-3 py-1 bg-[#16a34a] border border-black shadow-[2px_2px_0_rgba(0,0,0,1)] flex-shrink-0">
 									<span className="text-white font-bold font-vcr text-xs tracking-widest uppercase">
-										Registered
+										₹{currentTicket.price}
 									</span>
 								</div>
 							</div>
@@ -176,35 +195,87 @@ export default function TicketSection() {
 							{/* ---- BODY ---- */}
 							<div className="bg-[#0f001f]/95 px-6 py-4">
 
-								{/* DATE row */}
-								<div className="flex items-center py-3">
-									<span className="text-retro-cyan/70 font-vcr text-xs uppercase tracking-widest min-w-[80px]">
-										Date:
-									</span>
-									<span className="text-white font-vcr text-sm md:text-base font-bold">
-										{currentTicket.event_date}
-									</span>
-								</div>
+								{/* SCHEDULES - Conditional rendering based on count */}
+								{currentTicket.schedules.length > 1 ? (
+									<>
+										<div className="mb-3">
+											<span className="text-retro-cyan/70 font-vcr text-xs uppercase tracking-widest">
+												Multiple Sessions:
+											</span>
+										</div>
+										<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+											{currentTicket.schedules.map((schedule, idx) => (
+												<div key={idx} className="bg-[#1a0033]/50 border border-[#a855f7]/20 rounded-lg p-3">
+													<div className="text-[10px] text-retro-cyan/50 font-vcr uppercase tracking-widest mb-2 pb-2 border-b border-[#a855f7]/10">
+														Session {idx + 1}
+													</div>
+													{/* DATE row */}
+													<div className="flex items-center py-1.5">
+														<span className="text-retro-cyan/70 font-vcr text-[10px] uppercase tracking-widest min-w-[60px]">
+															Date:
+														</span>
+														<span className="text-white font-vcr text-xs md:text-sm font-bold">
+															{schedule.date}
+														</span>
+													</div>
 
-								{/* TIME row */}
-								<div className="flex items-center py-3 border-t border-dashed border-[#a855f7]/20">
-									<span className="text-retro-cyan/70 font-vcr text-xs uppercase tracking-widest min-w-[80px]">
-										Time:
-									</span>
-									<span className="text-white font-vcr text-sm md:text-base font-bold">
-										{currentTicket.event_time}
-									</span>
-								</div>
+													{/* TIME row */}
+													<div className="flex items-center py-1.5">
+														<span className="text-retro-cyan/70 font-vcr text-[10px] uppercase tracking-widest min-w-[60px]">
+															Time:
+														</span>
+														<span className="text-white font-vcr text-xs md:text-sm font-bold">
+															{schedule.time}
+														</span>
+													</div>
 
-								{/* VENUE row */}
-								<div className="flex items-center py-3 border-t border-dashed border-[#a855f7]/20">
-									<span className="text-retro-cyan/70 font-vcr text-xs uppercase tracking-widest min-w-[80px]">
-										Venue:
-									</span>
-									<span className="text-white font-vcr text-sm md:text-base">
-										{currentTicket.venue}
-									</span>
-								</div>
+													{/* VENUE row */}
+													<div className="flex items-center py-1.5">
+														<span className="text-retro-cyan/70 font-vcr text-[10px] uppercase tracking-widest min-w-[60px]">
+															Venue:
+														</span>
+														<span className="text-white font-vcr text-xs md:text-sm">
+															{schedule.venue}
+														</span>
+													</div>
+												</div>
+											))}
+										</div>
+									</>
+								) : (
+									<>
+										{/* Single session - normal layout */}
+										{/* DATE row */}
+										<div className="flex items-center py-3">
+											<span className="text-retro-cyan/70 font-vcr text-xs uppercase tracking-widest min-w-[80px]">
+												Date:
+											</span>
+											<span className="text-white font-vcr text-sm md:text-base font-bold">
+												{currentTicket.schedules[0].date}
+											</span>
+										</div>
+
+										{/* TIME row */}
+										<div className="flex items-center py-3 border-t border-dashed border-[#a855f7]/20">
+											<span className="text-retro-cyan/70 font-vcr text-xs uppercase tracking-widest min-w-[80px]">
+												Time:
+											</span>
+											<span className="text-white font-vcr text-sm md:text-base font-bold">
+												{currentTicket.schedules[0].time}
+											</span>
+										</div>
+
+										{/* VENUE row */}
+										<div className="flex items-center py-3 border-t border-dashed border-[#a855f7]/20">
+											<span className="text-retro-cyan/70 font-vcr text-xs uppercase tracking-widest min-w-[80px]">
+												Venue:
+											</span>
+											<span className="text-white font-vcr text-sm md:text-base">
+												{currentTicket.schedules[0].venue}
+											</span>
+										</div>
+									</>
+								)}
 
 								{/* TICKET NO + BARCODE row */}
 								<div className="flex items-end justify-between py-4 mt-2 gap-4 border-t-2 border-white/10">
@@ -222,7 +293,6 @@ export default function TicketSection() {
 						</div>
 					</div>
 				</div>
-				{/* ========== END TICKET CARD ========== */}
 
 				{/* Counter & Dots */}
 				<div className="text-center mt-6">
