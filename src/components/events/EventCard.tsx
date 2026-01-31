@@ -190,6 +190,7 @@ export const EventCard = ({
 						</div>
 					) : (
 						<button
+							type="button"
 							className="px-6 py-3 font-vcr text-sm bg-black/80 border-2 border-retro-yellow/30 text-retro-yellow/90 
 								hover:bg-retro-yellow/6 transition-all duration-200 backdrop-blur-sm uppercase"
 						>
