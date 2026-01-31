@@ -79,7 +79,7 @@ export function ProfileForm() {
 						className="absolute inset-0 bg-cover bg-center bg-no-repeat"
 						style={{ backgroundImage: `url(${BACKGROUND_IMAGE_URL})` }}
 					/>
-					<div className="absolute inset-0 bg-black/50"></div>
+					<div className="absolute inset-0 bg-black/60"></div>
 				</div>
 				<div className="relative z-10 py-6 px-4">
 					<ProfileCardSkeleton />
@@ -135,21 +135,7 @@ export function ProfileForm() {
 				{/* Overlay for better readability */}
 				<div className="absolute inset-0 bg-gradient-to-b from-black/0 via-black/10 to-black/70"></div>
 				
-				{/* Animated stars effect */}
-				<div className="absolute inset-0 overflow-hidden pointer-events-none">
-					{[...Array(50)].map((_, i) => (
-						<div
-							key={i}
-							className="absolute w-1 h-1 bg-white rounded-full animate-pulse"
-							style={{
-								top: `${Math.random() * 100}%`,
-								left: `${Math.random() * 100}%`,
-								animationDelay: `${Math.random() * 3}s`,
-								opacity: Math.random() * 0.5 + 0.3,
-							}}
-						/>
-					))}
-				</div>
+
 			</div>
 
 			{/* Content Container - Everything scrolls together */}
@@ -199,9 +185,9 @@ export function ProfileForm() {
 					<div className="lg:hidden flex justify-center mb-8">
 						<div className="relative">
 							{/* Console Base */}
-							<div className="bg-gradient-to-b from-[#1a0033]/95 to-black/95 rounded-xl border-3 border-[#00f0ff]/60 shadow-2xl shadow-[#00f0ff]/30 backdrop-blur-sm p-3">
+							<div className="bg-gradient-to-b from-[#1a0033]/95 to-black/95 rounded-xl border-3 border-[#a855f7]/60 shadow-2xl shadow-[#a855f7]/30 backdrop-blur-sm p-3">
 								{/* Top Accent Line */}
-								<div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#ff00ff] via-[#00f0ff] to-[#ff00ff] rounded-t-xl"></div>
+								<div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#ff00ff] via-[#a855f7] to-[#00ffff] rounded-t-xl"></div>
 								
 								{/* Screens Container */}
 								<div className="flex gap-2 mb-3">
@@ -220,8 +206,8 @@ export function ProfileForm() {
 														border-2 overflow-hidden
 														${
 															isActive
-																? "border-[#00f0ff] bg-gradient-to-br from-[#00f0ff]/30 to-[#ff00ff]/20 shadow-lg shadow-[#00f0ff]/60"
-																: "border-[#00f0ff]/40 bg-gradient-to-br from-black/80 to-[#1a0033]/80 hover:border-[#00f0ff]/70 hover:shadow-md hover:shadow-[#00f0ff]/40"
+																? "border-[#a855f7] bg-gradient-to-br from-[#a855f7]/30 to-[#ff00ff]/20 shadow-lg shadow-[#a855f7]/60"
+																: "border-[#a855f7]/40 bg-gradient-to-br from-black/80 to-[#1a0033]/80 hover:border-[#a855f7]/70 hover:shadow-md hover:shadow-[#a855f7]/40"
 														}
 													`}
 												>
@@ -230,7 +216,7 @@ export function ProfileForm() {
 														<span
 															className={`
 																text-[0.6rem] font-vcr uppercase tracking-tight transition-colors duration-300 text-center leading-tight
-																${isActive ? "text-[#00f0ff] font-bold" : "text-white/60 group-hover:text-white/80"}
+																${isActive ? "text-[#a855f7] font-bold" : "text-white/60 group-hover:text-white/80"}
 															`}
 														>
 															{tab.label}
@@ -242,19 +228,19 @@ export function ProfileForm() {
 														className="absolute inset-0 pointer-events-none"
 														style={{
 															backgroundImage:
-																"repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 240, 255, 0.05) 2px, rgba(0, 240, 255, 0.05) 4px)",
+																"repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(168, 85, 247, 0.05) 2px, rgba(168, 85, 247, 0.05) 4px)",
 														}}
 													></div>
 
 													{/* Active Glow */}
 													{isActive && (
-														<div className="absolute inset-0 bg-gradient-to-t from-[#00f0ff]/20 via-transparent to-transparent animate-pulse"></div>
+														<div className="absolute inset-0 bg-gradient-to-t from-[#a855f7]/20 via-transparent to-transparent animate-pulse"></div>
 													)}
 												</div>
 
 												{/* Screen Stand */}
 												<div className={`w-1.5 h-1.5 mx-auto mt-1 rounded-full transition-colors duration-300 ${
-													isActive ? "bg-[#00f0ff] shadow-lg shadow-[#00f0ff]/60" : "bg-[#00f0ff]/30"
+													isActive ? "bg-[#a855f7] shadow-lg shadow-[#a855f7]/60" : "bg-[#a855f7]/30"
 												}`}></div>
 											</button>
 										);
@@ -294,15 +280,14 @@ export function ProfileForm() {
 														marginRight: index === 2 ? '0' : index === 1 ? '0.5vw' : '1vw',
 													}}
 												>
-													{/* Screen Card */}
 													<div
 														className={`
 															relative rounded-lg transition-all duration-300
 															border-[3px] overflow-hidden
 															${
 																isActive
-																	? "border-[#00f0ff] bg-gradient-to-br from-[#00f0ff]/30 to-[#ff00ff]/20 shadow-xl shadow-[#00f0ff]/60"
-																	: "border-[#00f0ff]/40 bg-gradient-to-br from-black/80 to-[#1a0033]/80 hover:border-[#00f0ff]/70 hover:shadow-lg hover:shadow-[#00f0ff]/40"
+																	? "border-[#a855f7] bg-gradient-to-br from-[#a855f7]/30 to-[#ff00ff]/20 shadow-xl shadow-[#a855f7]/60"
+																	: "border-[#a855f7]/40 bg-gradient-to-br from-black/80 to-[#1a0033]/80 hover:border-[#a855f7]/70 hover:shadow-lg hover:shadow-[#a855f7]/40"
 															}
 														`}
 														style={{
@@ -315,7 +300,7 @@ export function ProfileForm() {
 															<span
 																className={`
 																	font-vcr uppercase tracking-wide transition-colors duration-300 text-center
-																	${isActive ? "text-[#00f0ff] font-bold" : "text-white/60 group-hover:text-white/80"}
+																	${isActive ? "text-[#a855f7] font-bold" : "text-white/60 group-hover:text-white/80"}
 																`}
 																style={{
 																	fontSize: 'clamp(0.65rem, 0.9vw, 1rem)',
@@ -330,20 +315,20 @@ export function ProfileForm() {
 															className="absolute inset-0 pointer-events-none"
 															style={{
 																backgroundImage:
-																	"repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 240, 255, 0.05) 2px, rgba(0, 240, 255, 0.05) 4px)",
+																	"repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(168, 85, 247, 0.05) 2px, rgba(168, 85, 247, 0.05) 4px)",
 															}}
 														></div>
 
 														{/* Active Glow */}
 														{isActive && (
-															<div className="absolute inset-0 bg-gradient-to-t from-[#00f0ff]/20 via-transparent to-transparent animate-pulse"></div>
+															<div className="absolute inset-0 bg-gradient-to-t from-[#a855f7]/20 via-transparent to-transparent animate-pulse"></div>
 														)}
 													</div>
 
 													{/* Screen indicator dot */}
 													<div 
 														className={`mx-auto mt-2 rounded-full transition-colors duration-300 ${
-															isActive ? "bg-[#00f0ff] shadow-lg shadow-[#00f0ff]/60" : "bg-[#00f0ff]/30"
+															isActive ? "bg-[#a855f7] shadow-lg shadow-[#a855f7]/60" : "bg-[#a855f7]/30"
 														}`}
 														style={{
 															width: 'clamp(6px, 0.6vw, 10px)',
