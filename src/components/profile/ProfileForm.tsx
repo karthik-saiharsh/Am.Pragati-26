@@ -10,7 +10,7 @@ import { profileFormSchema } from "@/types/profileTypes";
 import TicketSection from "./TicketSection";
 import Navbar from "../Navbar";
 
-const BACKGROUND_IMAGE_URL = "https://s63kyli3m9.ufs.sh/f/1VhMoqev0KlPOPCFLYsVs2cHu93gP8v0qI6OzjfNY5Adxaen";
+const BACKGROUND_IMAGE_URL = "https://s63kyli3m9.ufs.sh/f/1VhMoqev0KlPOQf8afVs2cHu93gP8v0qI6OzjfNY5AdxaenG							";
 
 const mockProfile: Profile = {
 	name: "John Doe",
@@ -133,14 +133,37 @@ export function ProfileForm() {
 				/>
 				
 				{/* Overlay for better readability */}
-				<div className="absolute inset-0 bg-gradient-to-b from-black/0 via-black/10 to-black/70"></div>
-				
-
+				<div className="absolute inset-0 bg-linear-to-b from-black/0 via-black/40 to-black/90"></div>
 			</div>
 
 			{/* Content Container - Everything scrolls together */}
 			<div className="relative z-10 py-8 px-4 md:py-12">
 				<div className="max-w-7xl mx-auto">
+					
+					{/* UNIFIED TAB NAVIGATION */}
+					<div className="flex flex-col md:flex-row justify-center items-center gap-4 mb-12">
+						<div className="bg-black/40 backdrop-blur-md border border-retro-cyan/30 p-2 rounded-lg flex flex-wrap justify-center gap-2 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+						{PROFILE_TABS.map((tab) => {
+							const isActive = activeTab === tab.id;
+							return (
+								<button
+									key={tab.id}
+									onClick={() => setActiveTab(tab.id as any)}
+									className={`
+										relative px-6 py-2 md:px-8 md:py-3 font-bold font-vcr uppercase tracking-widest transition-all duration-200 border-2
+										${isActive 
+											? "bg-[#7c3aed] border-black text-white shadow-[4px_4px_0_rgba(0,0,0,1)] translate-x-[-2px] translate-y-[-2px]" 
+											: "bg-transparent border-transparent text-white/60 hover:text-white hover:bg-white/5 hover:border-white/10"
+										}
+									`}
+								>
+									{tab.label}
+								</button>
+							);
+						})}
+						</div>
+					</div>
+
 					{/* Tab Content */}
 					<div className="min-h-[70vh] mb-8 lg:mb-12">
 						{activeTab === "profile" && (
@@ -177,171 +200,6 @@ export function ProfileForm() {
 								<TransactionList />
 							</div>
 						)}
-					</div>
-					
-					{/* Navigation - Scrolls with content */}
-					
-					{/* Small Screens (< 1024px) - Compact DJ Console */}
-					<div className="lg:hidden flex justify-center mb-8">
-						<div className="relative">
-							{/* Console Base */}
-							<div className="bg-gradient-to-b from-[#1a0033]/95 to-black/95 rounded-xl border-3 border-[#a855f7]/60 shadow-2xl shadow-[#a855f7]/30 backdrop-blur-sm p-3">
-								{/* Top Accent Line */}
-								<div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#ff00ff] via-[#a855f7] to-[#00ffff] rounded-t-xl"></div>
-								
-								{/* Screens Container */}
-								<div className="flex gap-2 mb-3">
-									{PROFILE_TABS.map((tab) => {
-										const isActive = activeTab === tab.id;
-										return (
-											<button
-												key={tab.id}
-												onClick={() => setActiveTab(tab.id as any)}
-												className="group relative"
-											>
-												{/* Monitor Screen */}
-												<div
-													className={`
-														relative w-20 h-16 rounded-md transition-all duration-300
-														border-2 overflow-hidden
-														${
-															isActive
-																? "border-[#a855f7] bg-gradient-to-br from-[#a855f7]/30 to-[#ff00ff]/20 shadow-lg shadow-[#a855f7]/60"
-																: "border-[#a855f7]/40 bg-gradient-to-br from-black/80 to-[#1a0033]/80 hover:border-[#a855f7]/70 hover:shadow-md hover:shadow-[#a855f7]/40"
-														}
-													`}
-												>
-													{/* Screen Content */}
-													<div className="absolute inset-0 flex items-center justify-center px-1">
-														<span
-															className={`
-																text-[0.6rem] font-vcr uppercase tracking-tight transition-colors duration-300 text-center leading-tight
-																${isActive ? "text-[#a855f7] font-bold" : "text-white/60 group-hover:text-white/80"}
-															`}
-														>
-															{tab.label}
-														</span>
-													</div>
-
-													{/* Scanlines */}
-													<div
-														className="absolute inset-0 pointer-events-none"
-														style={{
-															backgroundImage:
-																"repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(168, 85, 247, 0.05) 2px, rgba(168, 85, 247, 0.05) 4px)",
-														}}
-													></div>
-
-													{/* Active Glow */}
-													{isActive && (
-														<div className="absolute inset-0 bg-gradient-to-t from-[#a855f7]/20 via-transparent to-transparent animate-pulse"></div>
-													)}
-												</div>
-
-												{/* Screen Stand */}
-												<div className={`w-1.5 h-1.5 mx-auto mt-1 rounded-full transition-colors duration-300 ${
-													isActive ? "bg-[#a855f7] shadow-lg shadow-[#a855f7]/60" : "bg-[#a855f7]/30"
-												}`}></div>
-											</button>
-										);
-									})}
-								</div>
-
-								{/* Console Buttons Row */}
-								<div className="flex justify-center gap-1.5 px-1">
-									<div className="w-4 h-1.5 rounded-full bg-green-500/80 shadow-sm shadow-green-500/50"></div>
-									<div className="w-4 h-1.5 rounded-full bg-[#ff00ff]/80 shadow-sm shadow-[#ff00ff]/50"></div>
-									<div className="w-4 h-1.5 rounded-full bg-yellow-500/80 shadow-sm shadow-yellow-500/50"></div>
-									<div className="w-4 h-1.5 rounded-full bg-blue-500/80 shadow-sm shadow-blue-500/50"></div>
-								</div>
-
-								{/* Bottom Accent */}
-								<div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-red-500/40 via-[#ff00ff]/40 to-red-500/40 rounded-b-xl"></div>
-							</div>
-						</div>
-					</div>
-
-					{/* Large Screens (>= 1024px) - Separate Cards */}
-					<div className="hidden lg:block mb-8">
-						<div className="w-full px-4">
-							{/* Container for the three screens */}
-							<div className="relative w-full max-w-[1920px] mx-auto">
-								<div className="flex justify-center items-end pb-8">
-									<div className="flex gap-[1.5vw] xl:gap-[2vw] 2xl:gap-[2.5vw]">
-										{PROFILE_TABS.map((tab, index) => {
-											const isActive = activeTab === tab.id;
-											return (
-												<button
-													key={tab.id}
-													onClick={() => setActiveTab(tab.id as any)}
-													className="group relative"
-													style={{
-														marginLeft: index === 0 ? '0' : index === 1 ? '0.5vw' : '1vw',
-														marginRight: index === 2 ? '0' : index === 1 ? '0.5vw' : '1vw',
-													}}
-												>
-													<div
-														className={`
-															relative rounded-lg transition-all duration-300
-															border-[3px] overflow-hidden
-															${
-																isActive
-																	? "border-[#a855f7] bg-gradient-to-br from-[#a855f7]/30 to-[#ff00ff]/20 shadow-xl shadow-[#a855f7]/60"
-																	: "border-[#a855f7]/40 bg-gradient-to-br from-black/80 to-[#1a0033]/80 hover:border-[#a855f7]/70 hover:shadow-lg hover:shadow-[#a855f7]/40"
-															}
-														`}
-														style={{
-															width: 'clamp(120px, 9vw, 180px)',
-															height: 'clamp(90px, 7vw, 140px)',
-														}}
-													>
-														{/* Screen Content */}
-														<div className="absolute inset-0 flex items-center justify-center px-2">
-															<span
-																className={`
-																	font-vcr uppercase tracking-wide transition-colors duration-300 text-center
-																	${isActive ? "text-[#a855f7] font-bold" : "text-white/60 group-hover:text-white/80"}
-																`}
-																style={{
-																	fontSize: 'clamp(0.65rem, 0.9vw, 1rem)',
-																}}
-															>
-																{tab.label}
-															</span>
-														</div>
-
-														{/* Scanlines effect */}
-														<div
-															className="absolute inset-0 pointer-events-none"
-															style={{
-																backgroundImage:
-																	"repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(168, 85, 247, 0.05) 2px, rgba(168, 85, 247, 0.05) 4px)",
-															}}
-														></div>
-
-														{/* Active Glow */}
-														{isActive && (
-															<div className="absolute inset-0 bg-gradient-to-t from-[#a855f7]/20 via-transparent to-transparent animate-pulse"></div>
-														)}
-													</div>
-
-													{/* Screen indicator dot */}
-													<div 
-														className={`mx-auto mt-2 rounded-full transition-colors duration-300 ${
-															isActive ? "bg-[#a855f7] shadow-lg shadow-[#a855f7]/60" : "bg-[#a855f7]/30"
-														}`}
-														style={{
-															width: 'clamp(6px, 0.6vw, 10px)',
-															height: 'clamp(6px, 0.6vw, 10px)',
-														}}
-													></div>
-												</button>
-											);
-										})}
-									</div>
-								</div>
-							</div>
-						</div>
 					</div>
 				</div>
 			</div>

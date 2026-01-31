@@ -90,11 +90,11 @@ export default function TransactionList() {
 	if (!data || data.length === 0) {
 		return (
 			<div className="max-w-3xl mx-auto px-4">
-				<div className="bg-gradient-to-br from-black/90 via-[#0a0015]/95 to-black/90 rounded-xl border-2 border-[#a855f7]/50 shadow-2xl shadow-[#a855f7]/20 p-8">
-					<div className="text-center text-white/70">
-						<div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-[#a855f7]/20 to-[#ff00ff]/20 flex items-center justify-center border-2 border-[#a855f7]/50">
+				<div className="bg-black/60 backdrop-blur-sm border border-retro-cyan/30 rounded-lg p-8 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+					<div className="text-center text-white/50">
+						<div className="w-16 h-16 mx-auto mb-4 rounded-full bg-black/40 border border-[#a855f7]/30 flex items-center justify-center">
 							<svg
-								className="w-8 h-8 text-[#a855f7]"
+								className="w-8 h-8 text-[#a855f7]/50"
 								fill="none"
 								stroke="currentColor"
 								viewBox="0 0 24 24"
@@ -107,10 +107,10 @@ export default function TransactionList() {
 								/>
 							</svg>
 						</div>
-						<h3 className="text-xl font-semibold text-[#a855f7] mb-2 font-vcr">
+						<h3 className="text-xl font-bold text-[#a855f7] mb-2 font-vcr tracking-wider">
 							NO TRANSACTIONS
 						</h3>
-						<p className="font-vcr text-white/60 text-sm">You haven't made any transactions yet.</p>
+						<p className="font-vcr text-sm">You haven't made any transactions yet.</p>
 					</div>
 				</div>
 			</div>
@@ -122,70 +122,68 @@ export default function TransactionList() {
 
 	return (
 		<div className="w-full max-w-4xl mx-auto px-4">
-			<h2 className="text-2xl md:text-3xl font-bold text-center mb-6 font-vcr">
-				<span className="text-transparent bg-clip-text bg-gradient-to-r from-[#a855f7] via-[#ff00ff] to-[#00ffff]">
-					TRANSACTION HISTORY
-				</span>
+			<h2 className="text-3xl md:text-5xl font-bold text-center mb-8 font-jersey15 text-white drop-shadow-[2px_2px_0px_#a855f7]">
+				TRANSACTION HISTORY
 			</h2>
 
 			{/* Desktop Table */}
 			<div className="hidden md:block">
-				<div className="bg-gradient-to-br from-black/90 via-[#0a0015]/95 to-black/90 rounded-xl border-2 border-[#a855f7]/50 shadow-2xl shadow-[#a855f7]/20 overflow-hidden">
+				<div className="bg-black/60 backdrop-blur-sm border border-retro-cyan/30 rounded-lg shadow-[0_0_15px_rgba(0,0,0,0.5)] overflow-hidden">
 					{/* Top Neon Line */}
-					<div className="h-0.5 bg-gradient-to-r from-[#ff00ff] via-[#a855f7] to-[#00ffff]"></div>
+					<div className="h-0.5 w-full bg-linear-to-r from-transparent via-[#a855f7] to-transparent"></div>
 
-					<div className={isScrollable ? "max-h-80 overflow-y-auto" : ""}>
+					<div className={isScrollable ? "max-h-80 overflow-y-auto custom-scrollbar" : ""}>
 						<table className="min-w-full text-sm">
-							<thead className="bg-gradient-to-r from-[#0a0033]/80 to-[#1a0033]/80 backdrop-blur-md border-b-2 border-[#a855f7]/30 sticky top-0 z-10">
+							<thead className="bg-black/40 border-b border-white/10 sticky top-0 z-10 backdrop-blur-md">
 								<tr>
-									<th className="py-3 px-3 text-center text-xs font-semibold text-[#a855f7] uppercase tracking-wider w-[35%] font-vcr">
+									<th className="py-4 px-4 text-center text-xs font-bold text-retro-cyan uppercase tracking-widest w-[35%] font-vcr">
 										Transaction ID
 									</th>
-									<th className="py-3 px-3 text-center text-xs font-semibold text-[#a855f7] uppercase tracking-wider w-[25%] font-vcr">
+									<th className="py-4 px-4 text-center text-xs font-bold text-retro-cyan uppercase tracking-widest w-[25%] font-vcr">
 										Date/Time
 									</th>
-									<th className="py-3 px-3 text-center text-xs font-semibold text-[#a855f7] uppercase tracking-wider w-[15%] font-vcr">
+									<th className="py-4 px-4 text-center text-xs font-bold text-retro-cyan uppercase tracking-widest w-[15%] font-vcr">
 										Amount
 									</th>
-									<th className="py-3 px-3 text-center text-xs font-semibold text-[#a855f7] uppercase tracking-wider w-[15%] font-vcr">
+									<th className="py-4 px-4 text-center text-xs font-bold text-retro-cyan uppercase tracking-widest w-[15%] font-vcr">
 										Status
 									</th>
-									<th className="py-3 px-3 text-center text-xs font-semibold text-[#a855f7] uppercase tracking-wider w-[10%] font-vcr">
+									<th className="py-4 px-4 text-center text-xs font-bold text-retro-cyan uppercase tracking-widest w-[10%] font-vcr">
 										Action
 									</th>
 								</tr>
 							</thead>
-							<tbody className="text-center">
+							<tbody className="text-center divide-y divide-white/5">
 								{data.map((tx, index) => (
 									<tr
 										key={tx.txn_id}
-										className="border-t border-[#a855f7]/10 text-xs hover:bg-[#a855f7]/5 transition-colors duration-200"
+										className="hover:bg-white/5 transition-colors duration-200"
 									>
-										<td className="py-3 px-3 text-white/90 font-vcr truncate" title={tx.txn_id}>
+										<td className="py-4 px-4 text-white/70 font-vcr truncate" title={tx.txn_id}>
 											{tx.txn_id}
 										</td>
-										<td className="py-3 px-3 text-white/80 font-vcr">
+										<td className="py-4 px-4 text-white/60 font-vcr">
 											{formatDateTime(tx.created_at)}
 										</td>
-										<td className="py-3 px-3 text-[#00ffff] font-bold font-vcr">
+										<td className="py-4 px-4 text-white font-bold font-vcr">
 											₹{tx.registration_fee?.toFixed(2) ?? "0.00"}
 										</td>
-										<td className="py-3 px-3">
+										<td className="py-4 px-4">
 											<div className="flex justify-center">
 												<span
-													className={`px-3 py-1.5 rounded-lg text-xs font-bold font-vcr uppercase tracking-wider border-2 ${
+													className={`px-3 py-1 text-[10px] font-bold font-vcr uppercase tracking-wider border ${
 														tx.txn_status === "SUCCESS"
-															? "bg-green-500/20 border-green-500/60 text-green-400 shadow-md shadow-green-500/30"
+															? "bg-[#16a34a]/20 border-[#16a34a] text-[#16a34a]"
 															: tx.txn_status === "FAILED"
-																? "bg-red-500/20 border-red-500/60 text-red-400 shadow-md shadow-red-500/30"
-																: "bg-yellow-500/20 border-yellow-500/60 text-yellow-400 shadow-md shadow-yellow-500/30"
+																? "bg-red-500/20 border-red-500 text-red-500"
+																: "bg-yellow-500/20 border-yellow-500 text-yellow-500"
 													}`}
 												>
 													{tx.txn_status}
 												</span>
 											</div>
 										</td>
-										<td className="py-3 px-3">
+										<td className="py-4 px-4">
 											<div className="flex justify-center">
 												<button
 													onClick={async () => {
@@ -199,10 +197,11 @@ export default function TransactionList() {
 														}
 													}}
 													disabled={tx.txn_status !== "PENDING" || verifyingTxId === tx.txn_id}
-													className={`text-xs py-1.5 px-3 rounded-lg font-bold transition-all duration-300 min-w-14 font-vcr uppercase tracking-wider border-2 ${
+													className={`text-[10px] py-1.5 px-3 font-bold transition-all duration-100 min-w-16 font-vcr uppercase tracking-wider border-2 border-black 
+														${
 														tx.txn_status === "PENDING"
-															? "bg-green-500/20 border-green-500/60 text-green-400 hover:bg-green-500/30 hover:scale-105 cursor-pointer shadow-md shadow-green-500/30"
-															: "bg-black/40 border-white/20 text-white/30 cursor-not-allowed"
+															? "bg-[#7c3aed] text-white hover:bg-[#6d28d9] cursor-pointer shadow-[2px_2px_0_rgba(0,0,0,1)] hover:shadow-[3px_3px_0_rgba(0,0,0,1)] hover:translate-x-[-1px] hover:translate-y-[-1px] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none"
+															: "bg-gray-700 text-gray-500 border-gray-900 shadow-none cursor-not-allowed hidden"
 													}`}
 												>
 													{verifyingTxId === tx.txn_id ? (
@@ -218,81 +217,81 @@ export default function TransactionList() {
 							</tbody>
 						</table>
 					</div>
-
-					{/* Bottom Neon Line */}
-					<div className="h-0.5 bg-gradient-to-r from-[#00ffff] via-[#a855f7] to-[#ff00ff]"></div>
 				</div>
 			</div>
 
 			{/* Mobile Cards - Now with scrolling */}
 			<div className="md:hidden">
-				<div className="max-h-[32rem] overflow-y-auto pb-4 space-y-3 pr-1">
+				<div className="max-h-[32rem] overflow-y-auto pb-4 space-y-3 pr-1 custom-scrollbar">
 					{data.map((tx, index) => (
 						<div
 							key={`${tx.txn_id}-${index}`}
-							className="bg-gradient-to-br from-black/90 via-[#0a0015]/95 to-black/90 border-2 border-[#a855f7]/50 rounded-xl p-4 shadow-lg shadow-[#a855f7]/20"
+							className="bg-black/60 backdrop-blur-sm border border-retro-cyan/30 rounded-lg p-5 shadow-[0_0_10px_rgba(0,0,0,0.3)] relative overflow-hidden"
 						>
-							<div className="grid grid-cols-3 gap-2 text-xs">
-								<div className="col-span-2">
-									<span className="text-[#a855f7] font-medium font-vcr uppercase text-xs">
-										Transaction ID:
+							<div className="absolute top-0 left-0 w-1 h-full bg-linear-to-b from-[#a855f7] to-transparent"></div>
+							
+							<div className="grid grid-cols-3 gap-3 text-xs">
+								<div className="col-span-3 pb-2 border-b border-white/10 flex justify-between items-center">
+									<span className="text-retro-cyan font-bold font-vcr uppercase tracking-widest text-[10px]">
+										Transaction ID
 									</span>
-									<p className="text-white/90 font-vcr mt-1 break-all text-xs">{tx.txn_id}</p>
+									<span
+										className={`px-2 py-0.5 text-[9px] font-bold font-vcr uppercase tracking-wider border ${
+											tx.txn_status === "SUCCESS"
+												? "bg-[#16a34a]/20 border-[#16a34a] text-[#16a34a]"
+												: tx.txn_status === "FAILED"
+													? "bg-red-500/20 border-red-500 text-red-500"
+													: "bg-yellow-500/20 border-yellow-500 text-yellow-500"
+										}`}
+									>
+										{tx.txn_status}
+									</span>
 								</div>
-								<div className="col-span-1">
-									<span className="text-[#a855f7] font-medium font-vcr uppercase text-xs">Amount:</span>
-									<p className="text-white font-bold mt-1 text-[#00ffff] text-sm">
+								
+								<div className="col-span-3 pt-1">
+									<p className="text-white font-vcr text-xs tracking-wider break-all">{tx.txn_id}</p>
+								</div>
+
+								<div className="col-span-2">
+									<span className="text-white/40 font-bold font-vcr uppercase text-[10px] block mb-1">
+										Date
+									</span>
+									<p className="text-white/80 text-xs font-vcr">{formatDateTime(tx.created_at)}</p>
+								</div>
+								
+								<div className="col-span-1 text-right">
+									<span className="text-white/40 font-bold font-vcr uppercase text-[10px] block mb-1">
+										Amount
+									</span>
+									<p className="text-white font-bold text-sm">
 										₹{tx.registration_fee?.toFixed(2) ?? "0.00"}
 									</p>
 								</div>
-								<div className="col-span-2">
-									<span className="text-[#a855f7] font-medium font-vcr uppercase text-xs">
-										Date/Time:
-									</span>
-									<p className="text-white/80 mt-1 text-xs">{formatDateTime(tx.created_at)}</p>
-								</div>
-								<div>
-									<span className="text-[#a855f7] font-medium font-vcr uppercase text-xs">Status:</span>
-									<div className="mt-1.5">
-										<span
-											className={`px-2 py-1 rounded-lg text-xs font-bold font-vcr uppercase border-2 ${
-												tx.txn_status === "SUCCESS"
-													? "bg-green-500/20 border-green-500/60 text-green-400"
-													: tx.txn_status === "FAILED"
-														? "bg-red-500/20 border-red-500/60 text-red-400"
-														: "bg-yellow-500/20 border-yellow-500/60 text-yellow-400"
-											}`}
-										>
-											{tx.txn_status}
-										</span>
-									</div>
-								</div>
-								<div className="col-span-3 flex justify-center mt-2">
-									<button
-										onClick={async () => {
-											if (tx.txn_status === "PENDING") {
-												setVerifyingTxId(tx.txn_id);
-												try {
-													await onVerify(tx.txn_id);
-												} finally {
-													setVerifyingTxId(null);
+
+								{tx.txn_status === "PENDING" && (
+									<div className="col-span-3 flex justify-end mt-2 pt-2 border-t border-white/5">
+										<button
+											onClick={async () => {
+												if (tx.txn_status === "PENDING") {
+													setVerifyingTxId(tx.txn_id);
+													try {
+														await onVerify(tx.txn_id);
+													} finally {
+														setVerifyingTxId(null);
+													}
 												}
-											}
-										}}
-										disabled={tx.txn_status !== "PENDING" || verifyingTxId === tx.txn_id}
-										className={`flex items-center justify-center text-xs py-2 px-5 rounded-lg font-bold transition-all duration-300 w-full max-w-[160px] font-vcr uppercase border-2 ${
-											tx.txn_status === "PENDING"
-												? "bg-green-500/20 border-green-500/60 text-green-400 hover:bg-green-500/30 hover:scale-105 cursor-pointer"
-												: "bg-black/40 border-white/20 text-white/30 cursor-not-allowed"
-										}`}
-									>
-										{verifyingTxId === tx.txn_id ? (
-											<Loader2 className="h-4 w-4 animate-spin mx-auto" />
-										) : (
-											"Verify"
-										)}
-									</button>
-								</div>
+											}}
+											disabled={verifyingTxId === tx.txn_id}
+											className="flex items-center justify-center text-[10px] py-2 px-6 bg-[#7c3aed] border-2 border-black text-white font-bold font-vcr uppercase tracking-wider shadow-[3px_3px_0_rgba(0,0,0,1)] active:shadow-none active:translate-x-[1px] active:translate-y-[1px] transition-all"
+										>
+											{verifyingTxId === tx.txn_id ? (
+												<Loader2 className="h-3 w-3 animate-spin mx-auto" />
+											) : (
+												"Verify Status"
+											)}
+										</button>
+									</div>
+								)}
 							</div>
 						</div>
 					))}

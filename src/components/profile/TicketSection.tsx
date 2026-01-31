@@ -1,4 +1,4 @@
-import { Ticket, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 
 const mockTickets = [
@@ -24,6 +24,27 @@ const mockTickets = [
 		venue: "Conference Hall",
 	},
 ];
+
+// Generates a pseudo-random barcode visual seeded from a string
+function Barcode({ id }: { id: string }) {
+	const bars: number[] = [];
+	let seed = 0;
+	for (let i = 0; i < id.length; i++) seed += id.charCodeAt(i);
+	for (let i = 0; i < 48; i++) {
+		seed = (seed * 1664525 + 1013904223) & 0x7fffffff;
+		bars.push(seed % 4);
+	}
+
+	return (
+		<div className="flex items-stretch gap-px h-14">
+			{bars.map((width, i) => {
+				if (width === 0) return <div key={i} className="w-1" />;
+				const barWidth = width === 1 ? "w-0.5" : width === 2 ? "w-1" : "w-1.5";
+				return <div key={i} className={`${barWidth} bg-[#a855f7] rounded-sm opacity-90`} />;
+			})}
+		</div>
+	);
+}
 
 export default function TicketSection() {
 	const data = mockTickets;
@@ -51,15 +72,15 @@ export default function TicketSection() {
 	if (!data || data.length === 0) {
 		return (
 			<div className="max-w-3xl mx-auto px-4">
-				<div className="bg-gradient-to-br from-black/90 via-[#0a0015]/95 to-black/90 rounded-xl border-2 border-[#a855f7]/50 shadow-2xl shadow-[#a855f7]/20 p-8">
-					<div className="text-center text-white/70">
-						<div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-[#a855f7]/20 to-[#ff00ff]/20 flex items-center justify-center border-2 border-[#a855f7]/50">
-							<Ticket className="w-8 h-8 text-[#a855f7]" />
+				<div className="bg-black/60 backdrop-blur-sm border border-retro-cyan/30 rounded-lg p-8 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+					<div className="text-center text-white/50">
+						<div className="w-16 h-16 mx-auto mb-4 rounded-full bg-black/40 border border-[#a855f7]/30 flex items-center justify-center">
+							<svg className="w-8 h-8 text-[#a855f7]/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12V8a2 2 0 00-2-2H4a2 2 0 00-2 2v1a2 2 0 012 2v1a2 2 0 01-2 2v1a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2zM16 12a1 1 0 11-2 0 1 1 0 012 0zM16 16a1 1 0 11-2 0 1 1 0 012 0z" />
+							</svg>
 						</div>
-						<h3 className="text-xl font-semibold text-[#a855f7] mb-2 font-vcr">
-							NO TICKETS FOUND
-						</h3>
-						<p className="font-vcr text-white/60 text-sm">You haven't registered for any events yet.</p>
+						<h3 className="text-xl font-bold text-retro-cyan mb-2 font-vcr tracking-wider">NO TICKETS FOUND</h3>
+						<p className="font-vcr text-sm">You haven't registered for any events yet.</p>
 					</div>
 				</div>
 			</div>
@@ -76,98 +97,148 @@ export default function TicketSection() {
 	}
 
 	const currentTicket = data[currentIndex];
+	const ticketNumber = String(currentIndex + 1).padStart(8, "0");
 
 	return (
 		<div className="max-w-3xl mx-auto px-4">
-			<h2 className="text-2xl md:text-3xl font-bold text-center mb-6 font-vcr">
-				<span className="text-transparent bg-clip-text bg-gradient-to-r from-[#a855f7] via-[#ff00ff] to-[#00ffff]">
-					YOUR TICKETS
-				</span>
+			{/* Title */}
+			<h2 className="text-3xl md:text-5xl font-bold text-center mb-8 font-jersey15 text-white drop-shadow-[2px_2px_0px_#a855f7]">
+				YOUR TICKETS
 			</h2>
 
-			{/* Carousel Container */}
+			{/* Carousel */}
 			<div className="relative">
-				{/* Navigation Buttons */}
-				<button
-					onClick={handlePrevious}
-					className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-12 z-10 w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-r from-[#a855f7] to-[#7e22ce] border-2 border-[#a855f7] shadow-lg shadow-[#a855f7]/50 hover:shadow-[#a855f7]/70 flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 group"
-					disabled={data.length <= 1}
-				>
-					<ChevronLeft className="w-5 h-5 md:w-6 md:h-6 text-white group-hover:text-white transition-colors" />
-				</button>
+				{/* Left Arrow Wrapper */}
+				<div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-12 z-10">
+					<button
+						onClick={handlePrevious}
+						disabled={data.length <= 1}
+						className="w-10 h-10 md:w-12 md:h-12 bg-[#7c3aed] border-2 border-black shadow-[4px_4px_0_rgba(0,0,0,1)] flex items-center justify-center transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0_rgba(0,0,0,1)] active:shadow-[2px_2px_0_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] disabled:opacity-50 disabled:cursor-not-allowed group"
+					>
+						<ChevronLeft className="w-6 h-6 text-white" />
+					</button>
+				</div>
 
-				<button
-					onClick={handleNext}
-					className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-12 z-10 w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-r from-[#a855f7] to-[#7e22ce] border-2 border-[#a855f7] shadow-lg shadow-[#a855f7]/50 hover:shadow-[#a855f7]/70 flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 group"
-					disabled={data.length <= 1}
-				>
-					<ChevronRight className="w-5 h-5 md:w-6 md:h-6 text-white group-hover:text-white transition-colors" />
-				</button>
+				{/* Right Arrow Wrapper */}
+				<div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-12 z-10">
+					<button
+						onClick={handleNext}
+						disabled={data.length <= 1}
+						className="w-10 h-10 md:w-12 md:h-12 bg-[#7c3aed] border-2 border-black shadow-[4px_4px_0_rgba(0,0,0,1)] flex items-center justify-center transition-all hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0_rgba(0,0,0,1)] active:shadow-[2px_2px_0_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] disabled:opacity-50 disabled:cursor-not-allowed group"
+					>
+						<ChevronRight className="w-6 h-6 text-white" />
+					</button>
+				</div>
 
-				{/* Ticket Card */}
-				<div className="relative bg-gradient-to-br from-black/90 via-[#0a0015]/95 to-black/90 rounded-xl border-2 border-[#a855f7]/50 shadow-xl shadow-[#a855f7]/20 overflow-hidden transition-all duration-300">
-					{/* Top Neon Line */}
-					<div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#a855f7] via-[#ff00ff] to-[#00ffff]"></div>
+				{/* ========== TICKET CARD ========== */}
+				{/* Wrapped in the new container style but kept minimal padding to let ticket shine */}
+				<div className="bg-black/60 backdrop-blur-sm border border-retro-cyan/30 rounded-lg p-6 md:p-8 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+					<div className="relative rounded-xl overflow-visible">
+						{/* Outer shadow & border for ticket itself */}
+						<div className="relative rounded-xl overflow-hidden shadow-2xl shadow-[#a855f7]/20 border border-[#a855f7]/40">
 
-					<div className="p-6">
-						<div className="flex flex-col gap-4">
-							{/* Ticket Header */}
-							<div className="flex items-start justify-between gap-4">
-								<div className="flex-1">
-									<h3 className="text-lg md:text-xl font-bold text-[#a855f7] mb-3 font-vcr">
-										{currentTicket.event_name}
-									</h3>
-								</div>
-								<div className="flex-shrink-0">
-									<div className="px-4 py-2 bg-gradient-to-r from-[#00ff00]/20 to-[#00cc00]/20 border-2 border-[#00ff00]/60 rounded-lg shadow-lg shadow-[#00ff00]/30">
-										<span className="text-[#00ff00] font-bold font-vcr text-xs tracking-wider">
-											✓ REGISTERED
-										</span>
-									</div>
+							{/* ---- HEADER BAR ---- */}
+							<div className="relative bg-[#1a0033] px-6 py-4 flex items-center justify-between border-b border-[#a855f7]/20">
+								{/* Event name */}
+								<h3 className="text-base md:text-xl font-bold text-white font-vcr uppercase tracking-widest truncate mr-4">
+									{currentTicket.event_name}
+								</h3>
+
+								{/* Registered badge */}
+								<div className="px-3 py-1 bg-[#16a34a] border border-black shadow-[2px_2px_0_rgba(0,0,0,1)] flex-shrink-0">
+									<span className="text-white font-bold font-vcr text-xs tracking-widest uppercase">
+										Registered
+									</span>
 								</div>
 							</div>
 
-							{/* Ticket Details */}
-							<div className="space-y-2 text-white/70 text-sm font-vcr">
-								<p className="flex items-center gap-2">
-									<span className="text-[#ff00ff]">►</span>
-									<span className="text-[#a855f7]/70 min-w-[60px]">DATE:</span> 
-									<span className="text-white/90">{currentTicket.event_date}</span>
-								</p>
-								<p className="flex items-center gap-2">
-									<span className="text-[#ff00ff]">►</span>
-									<span className="text-[#a855f7]/70 min-w-[60px]">TIME:</span> 
-									<span className="text-white/90">{currentTicket.event_time}</span>
-								</p>
-								<p className="flex items-center gap-2">
-									<span className="text-[#ff00ff]">►</span>
-									<span className="text-[#a855f7]/70 min-w-[60px]">VENUE:</span> 
-									<span className="text-white/90">{currentTicket.venue}</span>
-								</p>
+							{/* ---- PUNCH NOTCHES (semicircles on left & right between header and body) ---- */}
+							<div className="relative bg-[#1a0033]">
+								{/* Left notch */}
+								<div
+									className="absolute -left-3 -top-3 w-6 h-6 rounded-full z-10 bg-black/80"
+									style={{
+										boxShadow: "inset 2px 0 4px rgba(0,0,0,0.5)",
+									}}
+								></div>
+								{/* Right notch */}
+								<div
+									className="absolute -right-3 -top-3 w-6 h-6 rounded-full z-10 bg-black/80"
+									style={{
+										boxShadow: "inset -2px 0 4px rgba(0,0,0,0.5)",
+									}}
+								></div>
+								
+								{/* Divider Line */}
+								<div className="border-t-2 border-dashed border-[#a855f7]/30 mx-4"></div>
+							</div>
+
+							{/* ---- BODY ---- */}
+							<div className="bg-[#0f001f]/95 px-6 py-4">
+
+								{/* DATE row */}
+								<div className="flex items-center py-3">
+									<span className="text-retro-cyan/70 font-vcr text-xs uppercase tracking-widest min-w-[80px]">
+										Date:
+									</span>
+									<span className="text-white font-vcr text-sm md:text-base font-bold">
+										{currentTicket.event_date}
+									</span>
+								</div>
+
+								{/* TIME row */}
+								<div className="flex items-center py-3 border-t border-dashed border-[#a855f7]/20">
+									<span className="text-retro-cyan/70 font-vcr text-xs uppercase tracking-widest min-w-[80px]">
+										Time:
+									</span>
+									<span className="text-white font-vcr text-sm md:text-base font-bold">
+										{currentTicket.event_time}
+									</span>
+								</div>
+
+								{/* VENUE row */}
+								<div className="flex items-center py-3 border-t border-dashed border-[#a855f7]/20">
+									<span className="text-retro-cyan/70 font-vcr text-xs uppercase tracking-widest min-w-[80px]">
+										Venue:
+									</span>
+									<span className="text-white font-vcr text-sm md:text-base">
+										{currentTicket.venue}
+									</span>
+								</div>
+
+								{/* TICKET NO + BARCODE row */}
+								<div className="flex items-end justify-between py-4 mt-2 gap-4 border-t-2 border-white/10">
+									<div>
+										<span className="text-white/40 font-vcr text-[0.6rem] uppercase tracking-widest block mb-1">
+											Ticket No.
+										</span>
+										<span className="text-retro-cyan font-vcr text-sm md:text-lg tracking-widest">{ticketNumber}</span>
+									</div>
+									<div className="opacity-70">
+                                        <Barcode id={currentTicket.event_id + ticketNumber} />
+                                    </div>
+								</div>
 							</div>
 						</div>
 					</div>
-
-					{/* Bottom Neon Line */}
-					<div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#00ffff] via-[#a855f7] to-[#ff00ff]"></div>
 				</div>
+				{/* ========== END TICKET CARD ========== */}
 
-				{/* Ticket Counter */}
-				<div className="text-center mt-4">
-					<p className="text-[#a855f7] text-sm font-vcr">
-						<span className="text-white/90">{currentIndex + 1}</span> / <span className="text-white/90">{data.length}</span>
+				{/* Counter & Dots */}
+				<div className="text-center mt-6">
+					<p className="text-retro-cyan text-sm font-vcr mb-3">
+						Ticket <span className="text-white">{currentIndex + 1}</span> of{" "}
+						<span className="text-white">{data.length}</span>
 					</p>
-					
-					{/* Dot Indicators */}
-					<div className="flex justify-center gap-2 mt-3">
+					<div className="flex justify-center gap-2">
 						{data.map((_, index) => (
 							<button
 								key={index}
 								onClick={() => setCurrentIndex(index)}
-								className={`w-2 h-2 rounded-full transition-all duration-300 ${
+								className={`h-2 rounded-none transition-all duration-300 ${
 									index === currentIndex
-										? "bg-[#a855f7] w-6 shadow-lg shadow-[#a855f7]/50"
-										: "bg-[#a855f7]/30 hover:bg-[#a855f7]/50"
+										? "bg-[#a855f7] w-8 border border-black shadow-[1px_1px_0_#fff]"
+										: "bg-white/20 w-2 hover:bg-white/40"
 								}`}
 							/>
 						))}
