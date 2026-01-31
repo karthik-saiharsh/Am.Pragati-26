@@ -10,7 +10,7 @@ import { profileFormSchema } from "@/types/profileTypes";
 import TicketSection from "./TicketSection";
 import Navbar from "../Navbar";
 
-const BACKGROUND_IMAGE_URL = "https://s63kyli3m9.ufs.sh/f/1VhMoqev0KlPOQf8afVs2cHu93gP8v0qI6OzjfNY5AdxaenG";
+const BACKGROUND_IMAGE_URL = "https://speugdv1vi.ufs.sh/f/y8q1VPJuKeA14UCdEhnMklqPihLE6Y7p9suDd2cTxZ5vnezt";
 
 const mockProfile: Profile = {
 	name: "John Doe",
