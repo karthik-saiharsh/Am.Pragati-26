@@ -90,7 +90,7 @@ export default function TransactionList() {
 	if (!data || data.length === 0) {
 		return (
 			<div className="max-w-3xl mx-auto px-4">
-				<div className="bg-black/60 backdrop-blur-sm border border-retro-cyan/30 rounded-lg p-8 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+				<div className="bg-black/60 backdrop-blur-sm border border-retro-cyan/30 p-8 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
 					<div className="text-center text-white/50">
 						<div className="w-16 h-16 mx-auto mb-4 rounded-full bg-black/40 border border-[#a855f7]/30 flex items-center justify-center">
 							<svg
@@ -128,7 +128,7 @@ export default function TransactionList() {
 
 			{/* Desktop Table */}
 			<div className="hidden md:block">
-				<div className="bg-black/60 backdrop-blur-sm border border-retro-cyan/30 rounded-lg shadow-[0_0_15px_rgba(0,0,0,0.5)] overflow-hidden">
+				<div className="bg-black/60 backdrop-blur-sm border border-retro-cyan/30 shadow-[0_0_15px_rgba(0,0,0,0.5)] overflow-hidden">
 					{/* Top Neon Line */}
 					<div className="h-0.5 w-full bg-linear-to-r from-transparent via-[#a855f7] to-transparent"></div>
 
@@ -226,7 +226,7 @@ export default function TransactionList() {
 					{data.map((tx, index) => (
 						<div
 							key={`${tx.txn_id}-${index}`}
-							className="bg-black/60 backdrop-blur-sm border border-retro-cyan/30 rounded-lg p-5 shadow-[0_0_10px_rgba(0,0,0,0.3)] relative overflow-hidden"
+							className="bg-black/60 backdrop-blur-sm border border-retro-cyan/30 p-5 shadow-[0_0_10px_rgba(0,0,0,0.3)] relative overflow-hidden"
 						>
 							<div className="absolute top-0 left-0 w-1 h-full bg-linear-to-b from-[#a855f7] to-transparent"></div>
 							

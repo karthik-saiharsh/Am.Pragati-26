@@ -86,7 +86,7 @@ export default function TicketSection() {
 	if (!data || data.length === 0) {
 		return (
 			<div className="max-w-3xl mx-auto px-4">
-				<div className="bg-black/60 backdrop-blur-sm border border-retro-cyan/30 rounded-lg p-8 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+				<div className="bg-black/60 backdrop-blur-sm border border-retro-cyan/30 p-8 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
 					<div className="text-center text-white/50">
 						<div className="w-16 h-16 mx-auto mb-4 rounded-full bg-black/40 border border-[#a855f7]/30 flex items-center justify-center">
 							<svg className="w-8 h-8 text-[#a855f7]/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -145,7 +145,7 @@ export default function TicketSection() {
 				</div>
 
 				{/* ========== TICKET CARD ========== */}
-				<div className="bg-black/60 backdrop-blur-sm border border-retro-cyan/30 rounded-lg p-6 md:p-8 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+				<div className="bg-black/60 backdrop-blur-sm border border-retro-cyan/30 p-6 md:p-8 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
 					<div className="relative rounded-xl overflow-visible">
 						{/* Outer shadow & border for ticket itself */}
 						<div className="relative rounded-xl overflow-hidden shadow-2xl shadow-[#a855f7]/20 border border-[#a855f7]/40">

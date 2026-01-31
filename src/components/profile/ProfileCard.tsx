@@ -116,7 +116,7 @@ export function ProfileCard({
 	return (
 		<div className="w-full mx-auto max-w-4xl px-4">
 			{/* New Glassmorphism Container */}
-			<div className="bg-black/60 backdrop-blur-sm border border-retro-cyan/30 rounded-lg p-8 md:p-12 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+			<div className="bg-black/60 backdrop-blur-sm border border-retro-cyan/30 p-8 md:p-12 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
 				
 				{/* Profile Header Section */}
 				<div className="flex flex-col md:flex-row gap-8 items-center md:items-start mb-10">
