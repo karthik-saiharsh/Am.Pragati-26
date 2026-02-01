@@ -1,9 +1,9 @@
+import type { AxiosError } from "axios";
 import { apiGet, apiPost } from "@/lib/api";
 import { API_ROUTES } from "@/lib/routes";
 import type { Schedule } from "@/types/eventTypes";
 import type { Profile, UpdateProfilePayload } from "@/types/profileTypes";
 import type { Ticket, TicketResponse } from "@/types/ticketTypes";
-import type { AxiosError } from "axios";
 
 export interface Transaction {
 	txn_id: string;

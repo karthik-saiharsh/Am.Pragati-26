@@ -4,12 +4,12 @@ import { useForm } from "react-hook-form";
 import { ProfileCard } from "@/components/profile/ProfileCard";
 import { ProfileCardSkeleton } from "@/components/profile/ProfileCardSkeleton";
 import TransactionList from "@/components/profile/TransactionList";
+import { useUpdateProfile, useUserProfile } from "@/hooks/useProfile";
 import { profileFormStore, useProfileStore } from "@/store/profileStore";
 import type { ProfileFormValues } from "@/types/profileTypes";
 import { profileFormSchema } from "@/types/profileTypes";
 import Navbar from "../Navbar";
 import TicketSection from "./TicketSection";
-import { useUserProfile, useUpdateProfile } from "@/hooks/useProfile";
 
 const BACKGROUND_IMAGE_URL =
 	"https://speugdv1vi.ufs.sh/f/y8q1VPJuKeA14UCdEhnMklqPihLE6Y7p9suDd2cTxZ5vnezt";

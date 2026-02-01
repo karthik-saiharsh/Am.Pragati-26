@@ -2,10 +2,10 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import EventDetail from "@/components/EventDetail";
 import EventDetailSkeleton from "@/components/EventDetailSkeleton";
 import Navbar from "@/components/Navbar";
-import { useAuthStore } from "@/store/auth.store";
 import { useEventById } from "@/hooks/useEventById";
-import { useStarSingleEvent } from "@/hooks/useStarSingleEvent";
 import { useRegisterEvent } from "@/hooks/useRegisterEvent";
+import { useStarSingleEvent } from "@/hooks/useStarSingleEvent";
+import { useAuthStore } from "@/store/auth.store";
 
 export const Route = createFileRoute("/events/$eventId")({
 	component: RouteComponent,
