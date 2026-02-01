@@ -1,58 +1,6 @@
 import { ChevronLeft, ChevronRight, User } from "lucide-react";
 import { useState } from "react";
-
-const mockTickets = [
-	{
-		event_id: "1",
-		event_name: "Tech Workshop 2026",
-		event_type: "Workshop",
-		schedules: [
-			{
-				date: "2026-03-15",
-				time: "10:00 AM - 12:00 PM",
-				venue: "Main Hall, Building A",
-			},
-			{
-				date: "2026-03-16",
-				time: "2:00 PM - 4:00 PM",
-				venue: "Lab 2, Building A",
-			},
-		],
-		team_name: "Code Warriors",
-		price: 590,
-	},
-	{
-		event_id: "2",
-		event_name: "Coding Championship",
-		event_type: "Competition",
-		schedules: [
-			{ date: "2026-03-20", time: "2:00 PM - 6:00 PM", venue: "Tech Center" },
-		],
-		team_name: "Solo Entry",
-		price: 250,
-	},
-	{
-		event_id: "3",
-		event_name: "AI Summit",
-		event_type: "Conference",
-		schedules: [
-			{
-				date: "2026-03-25",
-				time: "9:00 AM - 11:00 AM",
-				venue: "Conference Hall",
-			},
-			{
-				date: "2026-03-25",
-				time: "2:00 PM - 5:00 PM",
-				venue: "Conference Hall",
-			},
-			{ date: "2026-03-26", time: "10:00 AM - 1:00 PM", venue: "Auditorium" },
-			{ date: "2026-03-27", time: "10:00 AM - 1:00 PM", venue: "Auditorium" },
-		],
-		team_name: "Tech Innovators",
-		price: 1000,
-	},
-];
+import { useTickets } from "@/hooks/useTickets";
 
 // Generates a pseudo-random barcode visual seeded from a string
 function Barcode({ id }: { id: string }) {
@@ -78,16 +26,16 @@ function Barcode({ id }: { id: string }) {
 }
 
 export default function TicketSection() {
-	const data = mockTickets;
-	const isLoading = false;
-	const error = null;
+	const { data, isLoading, error } = useTickets();
 	const [currentIndex, setCurrentIndex] = useState(0);
 
 	const handlePrevious = () => {
+		if (!data) return;
 		setCurrentIndex((prev) => (prev === 0 ? data.length - 1 : prev - 1));
 	};
 
 	const handleNext = () => {
+		if (!data) return;
 		setCurrentIndex((prev) => (prev === data.length - 1 ? 0 : prev + 1));
 	};
 
@@ -97,6 +45,19 @@ export default function TicketSection() {
 				<div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-[#a855f7] border-t-transparent"></div>
 				<p className="mt-4 text-white/70 font-vcr text-sm">
 					Loading tickets...
+				</p>
+			</div>
+		);
+	}
+
+	if (error) {
+		return (
+			<div className="text-center py-12">
+				<p className="text-red-400 font-vcr">
+					Unable to load Registered Events: {error.message}
+				</p>
+				<p className="text-white/70 text-sm mt-2 font-vcr">
+					Please try again later
 				</p>
 			</div>
 		);
@@ -133,19 +94,6 @@ export default function TicketSection() {
 						</p>
 					</div>
 				</div>
-			</div>
-		);
-	}
-
-	if (error) {
-		return (
-			<div className="text-center py-12">
-				<p className="text-red-400 font-vcr">
-					Unable to load Registered Events
-				</p>
-				<p className="text-white/70 text-sm mt-2 font-vcr">
-					Please try again later
-				</p>
 			</div>
 		);
 	}
@@ -207,7 +155,7 @@ export default function TicketSection() {
 								{/* Price badge */}
 								<div className="px-3 py-1 bg-[#16a34a] border border-black shadow-[2px_2px_0_rgba(0,0,0,1)] flex-shrink-0">
 									<span className="text-white font-bold font-vcr text-xs tracking-widest uppercase">
-										₹{currentTicket.price}
+										₹{currentTicket.event_price}
 									</span>
 								</div>
 							</div>
@@ -246,7 +194,7 @@ export default function TicketSection() {
 										<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 											{currentTicket.schedules.map((schedule, idx) => (
 												<div
-													key={`session-${idx}-${schedule.date}-${schedule.time}`}
+													key={schedule.schedule_id}
 													className="bg-[#1a0033]/50 border border-[#a855f7]/20 rounded-lg p-3"
 												>
 													<div className="text-[10px] text-retro-cyan/50 font-vcr uppercase tracking-widest mb-2 pb-2 border-b border-[#a855f7]/10">
@@ -258,7 +206,9 @@ export default function TicketSection() {
 															Date:
 														</span>
 														<span className="text-white font-vcr text-xs md:text-sm font-bold">
-															{schedule.date}
+															{new Date(
+																schedule.event_date,
+															).toLocaleDateString()}
 														</span>
 													</div>
 
@@ -268,7 +218,11 @@ export default function TicketSection() {
 															Time:
 														</span>
 														<span className="text-white font-vcr text-xs md:text-sm font-bold">
-															{schedule.time}
+															{new Date(
+																schedule.start_time,
+															).toLocaleTimeString()}{" "}
+															-{" "}
+															{new Date(schedule.end_time).toLocaleTimeString()}
 														</span>
 													</div>
 
@@ -294,7 +248,9 @@ export default function TicketSection() {
 												Date:
 											</span>
 											<span className="text-white font-vcr text-sm md:text-base font-bold">
-												{currentTicket.schedules[0].date}
+												{new Date(
+													currentTicket.schedules[0].event_date,
+												).toLocaleDateString()}
 											</span>
 										</div>
 
@@ -304,7 +260,13 @@ export default function TicketSection() {
 												Time:
 											</span>
 											<span className="text-white font-vcr text-sm md:text-base font-bold">
-												{currentTicket.schedules[0].time}
+												{new Date(
+													currentTicket.schedules[0].start_time,
+												).toLocaleTimeString()}{" "}
+												-{" "}
+												{new Date(
+													currentTicket.schedules[0].end_time,
+												).toLocaleTimeString()}
 											</span>
 										</div>
 

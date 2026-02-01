@@ -3,6 +3,21 @@ import { API_ROUTES } from "@/lib/routes";
 import type { Schedule } from "@/types/eventTypes";
 import type { Profile, UpdateProfilePayload } from "@/types/profileTypes";
 import type { Ticket, TicketResponse } from "@/types/ticketTypes";
+import type { AxiosError } from "axios";
+
+export interface Transaction {
+	txn_id: string;
+	created_at: string;
+	registration_fee: number;
+	txn_status: "SUCCESS" | "PENDING" | "FAILED";
+}
+
+// Type guard to check for AxiosError
+function isAxiosError(
+	error: unknown,
+): error is AxiosError<{ message: string }> {
+	return (error as AxiosError).isAxiosError !== undefined;
+}
 
 export const ProfileService = {
 	getProfile: async (): Promise<Profile> => {
@@ -29,11 +44,13 @@ export const ProfileService = {
 				},
 			);
 			return res.message;
-		} catch (error: any) {
-			const message =
-				error?.response?.data?.message ||
-				error.message ||
-				"edit Profile failed";
+		} catch (error: unknown) {
+			let message = "edit Profile failed";
+			if (isAxiosError(error) && error.response?.data?.message) {
+				message = error.response.data.message;
+			} else if (error instanceof Error) {
+				message = error.message;
+			}
 			throw new Error(message);
 		}
 	},
@@ -90,7 +107,7 @@ export const ProfileService = {
 				const sTime = start.getTime();
 				const eTime = end.getTime();
 
-				if (isNaN(sTime) || isNaN(eTime)) {
+				if (Number.isNaN(sTime) || Number.isNaN(eTime)) {
 					isInvalid = true;
 					continue;
 				}
@@ -123,5 +140,16 @@ export const ProfileService = {
 		upcoming.sort((a, b) => (a.sortTime || 0) - (b.sortTime || 0));
 
 		return [...upcoming, ...unknown, ...completed].map((t) => t.ticket);
+	},
+
+	getTransactions: async (): Promise<Transaction[]> => {
+		const res = await apiGet<{ transactions: Transaction[] }>(
+			API_ROUTES.TRANSACTIONS.GET,
+		);
+		return res.transactions || [];
+	},
+
+	verifyTransaction: (txn_id: string): Promise<{ message: string }> => {
+		return apiPost(API_ROUTES.TRANSACTIONS.VERIFY, { txn_id });
 	},
 };

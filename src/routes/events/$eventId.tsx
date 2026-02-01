@@ -1,9 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import EventDetail, { DUMMY_EVENT } from "@/components/EventDetail";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import EventDetail from "@/components/EventDetail";
 import EventDetailSkeleton from "@/components/EventDetailSkeleton";
 import Navbar from "@/components/Navbar";
-import type { EventDetails } from "@/types/eventTypes";
+import { useAuthStore } from "@/store/auth.store";
+import { useEventById } from "@/hooks/useEventById";
+import { useStarSingleEvent } from "@/hooks/useStarSingleEvent";
+import { useRegisterEvent } from "@/hooks/useRegisterEvent";
 
 export const Route = createFileRoute("/events/$eventId")({
 	component: RouteComponent,
@@ -11,35 +13,74 @@ export const Route = createFileRoute("/events/$eventId")({
 
 function RouteComponent() {
 	const { eventId } = Route.useParams();
-	const [loading, setLoading] = useState(true);
+	const navigate = useNavigate();
+	const { isAuthenticated, isHydrated } = useAuthStore();
 
-	console.log("Event ID:", eventId);
-
-	const [event, setEvent] = useState<EventDetails>(DUMMY_EVENT);
-
-	useEffect(() => {
-		setLoading(true);
-		const timer = setTimeout(() => {
-			setLoading(false);
-		}, 1000);
-		return () => clearTimeout(timer);
-	}, []);
+	const {
+		data: event,
+		isLoading: isEventLoading,
+		error,
+	} = useEventById(eventId);
+	const starMutation = useStarSingleEvent(eventId);
+	const registerMutation = useRegisterEvent(eventId);
 
 	const handleStarToggle = () => {
-		setEvent((prev) => ({ ...prev, isStarred: !prev.isStarred }));
+		if (!isAuthenticated) {
+			navigate({ to: "/login" });
+			return;
+		}
+		if (event) {
+			starMutation.mutate(event.isStarred);
+		}
 	};
 
 	const handleRegister = () => {
-		setEvent((prev) => ({ ...prev, is_registered: true }));
+		if (!isAuthenticated) {
+			navigate({ to: "/login" });
+			return;
+		}
+		registerMutation.mutate();
 	};
 
-	if (loading) {
+	const isLoading = isEventLoading || !isHydrated;
+
+	if (isLoading) {
 		return (
-			<div className="min-h-screen bg-linear-to-b from-[#1a0a29] via-[#1a0b2e] to-black">
-				<div className="container mx-auto px-4 py-8">
-					<EventDetailSkeleton />
+			<>
+				<Navbar />
+				<div className="min-h-screen bg-linear-to-b from-[#1a0a29] via-[#1a0b2e] to-black">
+					<div className="container mx-auto px-4 py-8">
+						<EventDetailSkeleton />
+					</div>
 				</div>
-			</div>
+			</>
+		);
+	}
+
+	if (error) {
+		return (
+			<>
+				<Navbar />
+				<div className="min-h-screen bg-linear-to-b from-[#1a0a29] via-[#1a0b2e] to-black">
+					<div className="container mx-auto px-4 py-8 text-center">
+						<h2 className="text-2xl text-red-500">Failed to load event</h2>
+						<p className="text-red-400">{error.message}</p>
+					</div>
+				</div>
+			</>
+		);
+	}
+
+	if (!event) {
+		return (
+			<>
+				<Navbar />
+				<div className="min-h-screen bg-linear-to-b from-[#1a0a29] via-[#1a0b2e] to-black">
+					<div className="container mx-auto px-4 py-8 text-center">
+						<h2 className="text-2xl text-yellow-500">Event not found</h2>
+					</div>
+				</div>
+			</>
 		);
 	}
 
@@ -52,9 +93,9 @@ function RouteComponent() {
 						event={event}
 						onStarToggle={handleStarToggle}
 						onRegister={handleRegister}
-						isLoggedIn={true}
-						isStarLoading={false}
-						isRegisterLoading={false}
+						isLoggedIn={isAuthenticated}
+						isStarLoading={starMutation.isPending}
+						isRegisterLoading={registerMutation.isPending}
 					/>
 				</div>
 			</div>

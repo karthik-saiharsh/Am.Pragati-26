@@ -1,85 +1,50 @@
-import { useQueryClient } from "@tanstack/react-query";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { toast } from "react-hot-toast";
-import { EventService } from "@/services/EventService";
+"use client";
 
-export const useStarEvent = (eventId: string, initialIsStarred: boolean) => {
-	const [isStarred, setIsStarred] = useState(initialIsStarred);
-	const [isLoading, setIsLoading] = useState(false);
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { EventService } from "@/services/EventService";
+import type { Event } from "@/types/eventTypes";
+
+export function useStarEvent() {
 	const queryClient = useQueryClient();
 
-	const serverStateRef = useRef(initialIsStarred);
-	const currentStateRef = useRef(initialIsStarred);
-	const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
-
-	useEffect(() => {
-		setIsStarred(initialIsStarred);
-		serverStateRef.current = initialIsStarred;
-		currentStateRef.current = initialIsStarred;
-	}, [initialIsStarred]);
-
-	const toggleStar = useCallback(async () => {
-		const newState = !currentStateRef.current;
-
-		setIsStarred(newState);
-		currentStateRef.current = newState;
-
-		if (debounceTimerRef.current) {
-			clearTimeout(debounceTimerRef.current);
-		}
-
-		debounceTimerRef.current = setTimeout(async () => {
-			const finalState = currentStateRef.current;
-
-			if (finalState === serverStateRef.current) {
-				return;
+	return useMutation({
+		mutationFn: async (event: Event) => {
+			if (event.isStarred) {
+				await EventService.unstarEvent(event.event_id);
+			} else {
+				await EventService.starEvent(event.event_id);
 			}
+		},
+		onMutate: async (event: Event) => {
+			// Cancel any outgoing refetches (so they don't overwrite our optimistic update)
+			await queryClient.cancelQueries({ queryKey: ["events"] });
 
-			setIsLoading(true);
-			try {
-				if (finalState) {
-					await EventService.starEvent(eventId);
-					toast.success("Event added to favourites");
-				} else {
-					await EventService.unstarEvent(eventId);
-					toast.success("Event removed from favourites");
-				}
+			// Snapshot the previous value
+			const previousEvents = queryClient.getQueryData<Event[]>(["events"]);
 
-				serverStateRef.current = finalState;
-
-				queryClient.setQueryData(["event", eventId], (old: any) =>
-					old ? { ...old, isStarred: finalState } : old,
-				);
-
-				queryClient.setQueriesData({ queryKey: ["events"] }, (old: any) => {
-					if (!old) return old;
-
-					if (Array.isArray(old)) {
-						return old.map((e: any) =>
-							e.event_id === eventId || e.id === eventId
-								? { ...e, isStarred: finalState }
+			// Optimistically update to the new value
+			queryClient.setQueryData<Event[]>(["events"], (old) =>
+				old
+					? old.map((e) =>
+							e.event_id === event.event_id
+								? { ...e, isStarred: !e.isStarred }
 								: e,
-						);
-					}
+						)
+					: [],
+			);
 
-					return old;
-				});
-			} catch (error) {
-				const originalState = serverStateRef.current;
-				setIsStarred(originalState);
-				currentStateRef.current = originalState;
-
-				toast.error("Failed to update favourite status");
-				console.error("Star event error:", error);
-			} finally {
-				setIsLoading(false);
+			// Return a context object with the snapshotted value
+			return { previousEvents };
+		},
+		// If the mutation fails, use the context returned from onMutate to roll back
+		onError: (_err, _variables, context) => {
+			if (context?.previousEvents) {
+				queryClient.setQueryData<Event[]>(["events"], context.previousEvents);
 			}
-		}, 500);
-	}, [eventId, queryClient]);
-
-	return {
-		isStarred,
-		toggleStar,
-		isLoading,
-	};
-};
+		},
+		// Always refetch after error or success:
+		onSettled: () => {
+			queryClient.invalidateQueries({ queryKey: ["events"] });
+		},
+	});
+}

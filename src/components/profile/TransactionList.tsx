@@ -1,44 +1,5 @@
 import { Loader2 } from "lucide-react";
-import { useState } from "react";
-
-const mockTransactions = [
-	{
-		txn_id: "TXN123456789",
-		created_at: "2026-03-10T10:30:00Z",
-		registration_fee: 500.0,
-		txn_status: "SUCCESS",
-	},
-	{
-		txn_id: "TXN987654321",
-		created_at: "2026-03-08T14:20:00Z",
-		registration_fee: 300.0,
-		txn_status: "PENDING",
-	},
-	{
-		txn_id: "TXN123456789",
-		created_at: "2026-03-10T10:30:00Z",
-		registration_fee: 500.0,
-		txn_status: "SUCCESS",
-	},
-	{
-		txn_id: "TXN987654321",
-		created_at: "2026-03-08T14:20:00Z",
-		registration_fee: 300.0,
-		txn_status: "PENDING",
-	},
-	{
-		txn_id: "TXN123456789",
-		created_at: "2026-03-10T10:30:00Z",
-		registration_fee: 500.0,
-		txn_status: "SUCCESS",
-	},
-	{
-		txn_id: "TXN987654321",
-		created_at: "2026-03-08T14:20:00Z",
-		registration_fee: 300.0,
-		txn_status: "PENDING",
-	},
-];
+import { useTransactions, useVerifyTransaction } from "@/hooks/useTransactions";
 
 function formatDateTime(dateString: string) {
 	if (!dateString) return "";
@@ -57,16 +18,11 @@ function formatDateTime(dateString: string) {
 }
 
 export default function TransactionList() {
-	const data = mockTransactions;
-	const isLoading = false;
-	const error = null;
-	const [verifyingTxId, setVerifyingTxId] = useState<string | null>(null);
+	const { data, isLoading, error } = useTransactions();
+	const verifyMutation = useVerifyTransaction();
 
 	const onVerify = async (txn_id: string) => {
-		setVerifyingTxId(txn_id);
-		setTimeout(() => {
-			setVerifyingTxId(null);
-		}, 2000);
+		verifyMutation.mutate(txn_id);
 	};
 
 	if (isLoading) {
@@ -83,7 +39,9 @@ export default function TransactionList() {
 	if (error) {
 		return (
 			<div className="text-center py-12">
-				<p className="text-red-400 font-vcr">Unable to load Transactions</p>
+				<p className="text-red-400 font-vcr">
+					Unable to load Transactions: {error.message}
+				</p>
 				<p className="text-white/70 text-sm mt-2 font-vcr">
 					Please try again later
 				</p>
@@ -202,19 +160,10 @@ export default function TransactionList() {
 											<div className="flex justify-center">
 												<button
 													type="button"
-													onClick={async () => {
-														if (tx.txn_status === "PENDING") {
-															setVerifyingTxId(tx.txn_id);
-															try {
-																await onVerify(tx.txn_id);
-															} finally {
-																setVerifyingTxId(null);
-															}
-														}
-													}}
+													onClick={() => onVerify(tx.txn_id)}
 													disabled={
 														tx.txn_status !== "PENDING" ||
-														verifyingTxId === tx.txn_id
+														verifyMutation.isPending
 													}
 													className={`text-[10px] py-1.5 px-3 font-bold transition-all duration-100 min-w-16 font-vcr uppercase tracking-wider border-2 border-black 
 														${
@@ -223,7 +172,8 @@ export default function TransactionList() {
 																: "bg-gray-700 text-gray-500 border-gray-900 shadow-none cursor-not-allowed hidden"
 														}`}
 												>
-													{verifyingTxId === tx.txn_id ? (
+													{verifyMutation.isPending &&
+													verifyMutation.variables === tx.txn_id ? (
 														<Loader2 className="h-3 w-3 animate-spin mx-auto" />
 													) : (
 														"Verify"
@@ -295,20 +245,12 @@ export default function TransactionList() {
 									<div className="col-span-3 flex justify-end mt-2 pt-2 border-t border-white/5">
 										<button
 											type="button"
-											onClick={async () => {
-												if (tx.txn_status === "PENDING") {
-													setVerifyingTxId(tx.txn_id);
-													try {
-														await onVerify(tx.txn_id);
-													} finally {
-														setVerifyingTxId(null);
-													}
-												}
-											}}
-											disabled={verifyingTxId === tx.txn_id}
+											onClick={() => onVerify(tx.txn_id)}
+											disabled={verifyMutation.isPending}
 											className="flex items-center justify-center text-[10px] py-2 px-6 bg-[#7c3aed] border-2 border-black text-white font-bold font-vcr uppercase tracking-wider shadow-[3px_3px_0_rgba(0,0,0,1)] active:shadow-none active:translate-x-[1px] active:translate-y-[1px] transition-all"
 										>
-											{verifyingTxId === tx.txn_id ? (
+											{verifyMutation.isPending &&
+											verifyMutation.variables === tx.txn_id ? (
 												<Loader2 className="h-3 w-3 animate-spin mx-auto" />
 											) : (
 												"Verify Status"

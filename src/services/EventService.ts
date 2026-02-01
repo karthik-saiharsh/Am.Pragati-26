@@ -1,4 +1,4 @@
-import { apiDelete, apiGet, apiPut } from "@/lib/api";
+import { apiDelete, apiGet, apiPost, apiPut } from "@/lib/api";
 import { API_ROUTES } from "@/lib/routes";
 import { randomise } from "@/lib/utils";
 import type {
@@ -107,4 +107,9 @@ export const EventService = {
 
 	unstarEvent: (eventId: string): Promise<{ message: string }> =>
 		apiDelete(API_ROUTES.EVENTS.FAVOURITE(eventId)),
+
+	registerForEvent: (
+		eventId: string,
+	): Promise<{ checkout_url: string; message: string }> =>
+		apiPost(API_ROUTES.EVENTS.BOOK(eventId)),
 };
