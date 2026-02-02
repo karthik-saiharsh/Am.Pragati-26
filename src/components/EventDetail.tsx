@@ -1,7 +1,6 @@
 const DUMMY_EVENT = {
 	id: "evt-001",
 	event_name: "NEON OASIS 2049",
-	blurb: "A retro night of music, gaming, and digital art.",
 	event_description: `Step into the digital desert paradise, NEAIS 2019 is convergence sound, light, and code. Experience live synthwave arte, limatta digital art installiations, and retro tournaments awa the night under the artificial stars.
 
 ## Event Highlights
@@ -64,6 +63,8 @@ The event runs from 10 PM to 4 AM, with different activities scheduled throughou
 		},
 	],
 	tags: ["MUSIC", "DIGITAL", "GAMING", "FESTIVAL"],
+	blurb:
+		"Experience the ultimate neon-lit digital festival with music, art, and gaming!",
 };
 
 import { useRouter } from "@tanstack/react-router";
