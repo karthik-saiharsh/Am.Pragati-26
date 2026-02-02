@@ -4,24 +4,15 @@ import { useForm } from "react-hook-form";
 import { ProfileCard } from "@/components/profile/ProfileCard";
 import { ProfileCardSkeleton } from "@/components/profile/ProfileCardSkeleton";
 import TransactionList from "@/components/profile/TransactionList";
+import { useUpdateProfile, useUserProfile } from "@/hooks/useProfile";
 import { profileFormStore, useProfileStore } from "@/store/profileStore";
-import type { Profile, ProfileFormValues } from "@/types/profileTypes";
+import type { ProfileFormValues } from "@/types/profileTypes";
 import { profileFormSchema } from "@/types/profileTypes";
 import Navbar from "../Navbar";
 import TicketSection from "./TicketSection";
 
 const BACKGROUND_IMAGE_URL =
 	"https://speugdv1vi.ufs.sh/f/y8q1VPJuKeA14UCdEhnMklqPihLE6Y7p9suDd2cTxZ5vnezt";
-
-const mockProfile: Profile = {
-	name: "John Doe",
-	email: "john.doe@example.com",
-	phone_number: "9876543210",
-	college_name: "Example University",
-	college_city: "Coimbatore",
-	is_amrita_student: false,
-	is_registered: true,
-};
 
 const PROFILE_TABS = [
 	{ id: "profile", label: "PROFILE" },
@@ -41,40 +32,56 @@ export function ProfileForm() {
 
 	const setIsEditMode = useProfileStore((state) => state.setIsEditMode);
 
-	const data = mockProfile;
-	const isLoading = false;
-	const error = null;
+	const { data, isLoading, error } = useUserProfile();
+	const updateProfileMutation = useUpdateProfile();
 
 	const { setAllFields, setActiveTab, activeTab } = profileFormStore();
 
 	useEffect(() => {
 		if (data) {
-			setAllFields({
+			const initialData = {
 				name: data.name,
 				phone_number: data.phone_number,
 				college_name: data.college_name,
 				college_city: data.college_city,
-			});
-			reset(data);
+			};
+			setAllFields(initialData);
+			reset(initialData);
 		}
 	}, [data, setAllFields, reset]);
 
 	const onSubmit = handleSubmit(async (values) => {
-		setAllFields(values);
-		try {
-			console.log("Profile updated:", values);
-			reset(values);
-			setIsEditMode(false);
-		} catch (e) {
-			console.error("Error updating profile:", e);
-			reset(data);
-			setIsEditMode(false);
-		}
+		updateProfileMutation.mutate(values, {
+			onSuccess: (updatedData) => {
+				// The backend might not return the full profile, so we merge
+				const newValues = {
+					...values,
+					...(updatedData as Partial<ProfileFormValues>),
+				};
+				setAllFields(newValues);
+				reset(newValues);
+				setIsEditMode(false);
+			},
+			onError: () => {
+				// If server-side validation fails or there's an error,
+				// we can reset to the original state before editing.
+				if (data) {
+					reset({
+						name: data.name,
+						phone_number: data.phone_number,
+						college_name: data.college_name,
+						college_city: data.college_city,
+					});
+				}
+				setIsEditMode(false);
+			},
+		});
 	});
 
 	if (isLoading) {
 		return (
 			<main className="min-h-screen relative overflow-hidden">
+				<Navbar />
 				<div className="fixed inset-0 z-0">
 					<div
 						className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -92,6 +99,7 @@ export function ProfileForm() {
 	if (error) {
 		return (
 			<div className="min-h-screen flex items-center justify-center relative overflow-hidden">
+				<Navbar />
 				<div className="fixed inset-0 z-0">
 					<div
 						className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -112,6 +120,7 @@ export function ProfileForm() {
 	if (!data) {
 		return (
 			<div className="min-h-screen flex items-center justify-center relative overflow-hidden">
+				<Navbar />
 				<div className="fixed inset-0 z-0">
 					<div
 						className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -120,7 +129,7 @@ export function ProfileForm() {
 					<div className="absolute inset-0 bg-black/50"></div>
 				</div>
 				<p className="text-white/70 text-center font-vcr relative z-10">
-					No data found.
+					No profile data found. Please log in again.
 				</p>
 			</div>
 		);
@@ -193,7 +202,7 @@ export function ProfileForm() {
 									college_city: errors.college_city?.message,
 								}}
 								onSubmit={onSubmit}
-								isDirty={isDirty}
+								isDirty={isDirty || updateProfileMutation.isPending}
 								is_amrita_coimbatore={data.is_amrita_student}
 								has_offline_event={data.is_registered}
 							/>

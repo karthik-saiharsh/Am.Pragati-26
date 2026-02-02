@@ -98,7 +98,11 @@ api.interceptors.response.use(
 				toast.error("Resource not found");
 			}
 		} else if (status === 403) {
-			// Toasts are skipped for 403 errors
+			toast.error(
+				"You are not authorized to perform this action. Logging out.",
+			);
+			useAuthStore.getState().logout();
+			window.location.href = "/login";
 		} else if (status === 408) {
 			toast.error("Please try again later.");
 		} else if (status === 429) {

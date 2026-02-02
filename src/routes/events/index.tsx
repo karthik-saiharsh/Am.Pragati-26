@@ -1,136 +1,26 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { useMemo, useState } from "react";
 import { EventCard } from "@/components/events/EventCard";
 import { FilterDropdown } from "@/components/events/FilterDropdown";
 import { FilterRadioPair } from "@/components/events/FilterRadioPair";
 import Navbar from "@/components/Navbar";
-import type { Event } from "@/types/eventTypes";
+import { useAllEvents } from "@/hooks/useAllEvents";
+import { useStarEvent } from "@/hooks/useStarEvent";
+import { useAuthStore } from "@/store/auth.store";
 
 const BACKGROUND_IMAGE_URL =
 	"https://speugdv1vi.ufs.sh/f/y8q1VPJuKeA1TTlZtKwkMt4sZaGR2pLP37qUHNQlgKObDVmf";
 
-/* ---------------- SAMPLE EVENT DATA ---------------- */
-const sampleEvents: Event[] = [
-	{
-		event_id: "1",
-		event_name: "Code Wars 2026",
-		event_image_url:
-			"https://images.unsplash.com/photo-1517694712202-14dd9538aa97",
-		event_description:
-			"Battle it out in this intense coding competition. Solve complex algorithms and win prizes!",
-		event_date: "2026-02-15",
-		event_status: "open",
-		event_price: 500,
-		is_group: true,
-		is_management: true,
-		event_type: "competition",
-		tags: ["Coding", "Technical", "Team"],
-		is_registered: false,
-		isStarred: false,
-		is_full: false,
-		is_filling_fast: true,
-	},
-	{
-		event_id: "2",
-		event_name: "Retro Gaming Night",
-		event_image_url:
-			"https://images.unsplash.com/photo-1511512578047-dfb367046420",
-		event_description:
-			"Nostalgic gaming session with classic arcade games and retro consoles.",
-		event_date: "2026-02-20",
-		event_status: "open",
-		event_price: 0,
-		is_group: false,
-		is_management: false,
-		event_type: "entertainment",
-		tags: ["Gaming", "Fun"],
-		is_registered: true,
-		isStarred: true,
-		is_full: false,
-		is_filling_fast: false,
-	},
-	{
-		event_id: "3",
-		event_name: "AI/ML Workshop",
-		event_image_url:
-			"https://images.unsplash.com/photo-1677442136019-21780ecad995",
-		event_description:
-			"Learn about cutting-edge AI and Machine Learning techniques from industry experts.",
-		event_date: "2026-03-01",
-		event_status: "completed",
-		event_price: 1000,
-		is_group: false,
-		is_management: true,
-		event_type: "workshop",
-		tags: ["AI", "ML", "Workshop"],
-		is_registered: false,
-		isStarred: false,
-		is_full: true,
-		is_filling_fast: false,
-	},
-	{
-		event_id: "4",
-		event_name: "Cyberpunk Dance Battle",
-		event_image_url:
-			"https://images.unsplash.com/photo-1516450360452-9312f5e86fc7",
-		event_description:
-			"Show off your moves in this neon-lit dance competition with amazing prizes!",
-		event_date: "2026-02-25",
-		event_status: "open",
-		event_price: 300,
-		is_group: true,
-		is_management: false,
-		event_type: "cultural",
-		tags: ["Dance", "Cultural", "Performance"],
-		is_registered: false,
-		isStarred: true,
-		is_full: false,
-		is_filling_fast: true,
-	},
-	{
-		event_id: "5",
-		event_name: "Blockchain Hackathon",
-		event_image_url: null,
-		event_description:
-			"Build innovative blockchain solutions in this 24-hour hackathon.",
-		event_date: "2026-03-10",
-		event_status: "open",
-		event_price: 2500,
-		is_group: true,
-		is_management: true,
-		event_type: "hackathon",
-		tags: ["Blockchain", "Web3", "Coding", "Innovation"],
-		is_registered: false,
-		isStarred: false,
-		is_full: false,
-		is_filling_fast: false,
-	},
-	{
-		event_id: "6",
-		event_name: "Neon Poetry Slam",
-		event_image_url:
-			"https://images.unsplash.com/photo-1519389950473-47ba0277781c",
-		event_description:
-			"Express yourself through poetry in this electrifying performance event.",
-		event_date: "2026-02-18",
-		event_status: "open",
-		event_price: 0,
-		is_group: false,
-		is_management: false,
-		event_type: "cultural",
-		tags: ["Poetry", "Cultural"],
-		is_registered: true,
-		isStarred: false,
-		is_full: false,
-		is_filling_fast: false,
-	},
-];
+export const Route = createFileRoute("/events/")({
+	component: EventsPage,
+});
 
-/* ---------------- COMPONENT ---------------- */
-export const EventsPage = () => {
-	/* LOCAL EVENTS STATE */
-	const [events, setEvents] = useState<Event[]>(sampleEvents);
+function EventsPage() {
+	const { data: events, isLoading, error } = useAllEvents();
+	const starMutation = useStarEvent();
+	const navigate = useNavigate();
+	const { user } = useAuthStore();
 
 	/* SEARCH */
 	const [search, setSearch] = useState("");
@@ -154,13 +44,22 @@ export const EventsPage = () => {
 		"registered" | "not-registered" | null
 	>(null);
 
-	/* STAR TOGGLE */
 	const handleStarToggle = (eventId: string) => {
-		setEvents((prev) =>
-			prev.map((ev) =>
-				ev.event_id === eventId ? { ...ev, isStarred: !ev.isStarred } : ev,
-			),
-		);
+		if (!user) {
+			navigate({ to: "/login" });
+			return;
+		}
+		const event = events?.find((e) => e.event_id === eventId);
+		if (event) {
+			starMutation.mutate(event);
+		}
+	};
+
+	const handleCardClick = (eventId: string) => {
+		navigate({
+			to: "/events/$eventId",
+			params: { eventId },
+		});
 	};
 
 	/* CLEAR ALL */
@@ -176,7 +75,7 @@ export const EventsPage = () => {
 
 	/* SEARCH FILTER */
 	const filteredEvents = useMemo(() => {
-		let result = [...events];
+		let result = [...(events || [])];
 
 		// Search filter
 		if (search.trim()) {
@@ -258,6 +157,56 @@ export const EventsPage = () => {
 		regType,
 	]);
 
+	if (isLoading) {
+		return (
+			<>
+				<Navbar />
+				<div className="min-h-screen w-full bg-black relative overflow-hidden pt-20">
+					<div
+						className="absolute inset-0 opacity-[0.04] pointer-events-none"
+						style={{
+							backgroundImage:
+								"linear-gradient(rgba(168,85,247,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(168,85,247,0.4) 1px, transparent 1px)",
+							backgroundSize: "50px 50px",
+						}}
+					/>
+					<div className="relative z-10 p-4 md:p-8">
+						<div className="text-center mb-12 md:mb-16">
+							<h1 className="font-jersey15 text-5xl md:text-7xl lg:text-8xl text-white drop-shadow-[3px_3px_0px_rgba(168,85,247,0.8)] md:drop-shadow-[4px_4px_0px_rgba(168,85,247,0.8)] tracking-tight uppercase leading-none">
+								ALL EVENTS
+							</h1>
+						</div>
+						<div className="max-w-7xl mx-auto mb-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 xl:gap-5">
+							<div className="w-full aspect-3/5 bg-gray-900/50 animate-pulse" />
+							<div className="w-full aspect-3/5 bg-gray-900/50 animate-pulse" />
+							<div className="w-full aspect-3/5 bg-gray-900/50 animate-pulse" />
+							<div className="w-full aspect-3/5 bg-gray-900/50 animate-pulse" />
+							<div className="w-full aspect-3/5 bg-gray-900/50 animate-pulse" />
+							<div className="w-full aspect-3/5 bg-gray-900/50 animate-pulse" />
+							<div className="w-full aspect-3/5 bg-gray-900/50 animate-pulse" />
+							<div className="w-full aspect-3/5 bg-gray-900/50 animate-pulse" />
+						</div>
+					</div>
+				</div>
+			</>
+		);
+	}
+
+	if (error) {
+		return (
+			<>
+				<Navbar />
+				<div className="min-h-screen w-full bg-black relative overflow-hidden pt-20">
+					<div className="relative z-10 p-4 md:p-8 flex items-center justify-center">
+						<p className="text-red-500 font-vcr text-2xl">
+							Error loading events: {error.message}
+						</p>
+					</div>
+				</div>
+			</>
+		);
+	}
+
 	return (
 		<>
 			<Navbar />
@@ -316,7 +265,7 @@ export const EventsPage = () => {
 									</span>{" "}
 									OF{" "}
 									<span className="text-white font-bold text-base">
-										{events.length}
+										{events?.length || 0}
 									</span>{" "}
 									EVENTS
 								</p>
@@ -525,7 +474,12 @@ export const EventsPage = () => {
 									<EventCard
 										key={event.event_id}
 										event={event}
-										onStarToggle={handleStarToggle}
+										onStarToggle={() => handleStarToggle(event.event_id)}
+										isStarLoading={
+											starMutation.isPending &&
+											starMutation.variables?.event_id === event.event_id
+										}
+										onCardClick={() => handleCardClick(event.event_id)}
 									/>
 								))}
 							</div>
@@ -535,8 +489,4 @@ export const EventsPage = () => {
 			</div>
 		</>
 	);
-};
-
-export const Route = createFileRoute("/events/")({
-	component: EventsPage,
-});
+}

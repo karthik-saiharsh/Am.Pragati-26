@@ -64,4 +64,10 @@ export const profileFormSchema = z.object({
 		.max(200, "City Name cannot be longer than 200 characters"),
 });
 
+export interface EditProfileState {
+	isEditMode: boolean;
+	setIsEditMode: (mode: boolean) => void;
+	toggleEditMode: () => void;
+}
+
 export type ProfileFormValues = z.infer<typeof profileFormSchema>;
