@@ -54,7 +54,10 @@ export function ProfileForm() {
 		updateProfileMutation.mutate(values, {
 			onSuccess: (updatedData) => {
 				// The backend might not return the full profile, so we merge
-				const newValues = { ...values, ...updatedData };
+				const newValues = {
+					...values,
+					...(updatedData as Partial<ProfileFormValues>),
+				};
 				setAllFields(newValues);
 				reset(newValues);
 				setIsEditMode(false);
@@ -106,7 +109,7 @@ export function ProfileForm() {
 				</div>
 				<div className="text-center relative z-10">
 					<p className="text-red-400 font-vcr text-xl mb-2">
-						Unable to load Profile: {error.message}
+						Unable to load Profile
 					</p>
 					<p className="text-white/70 font-vcr">Please try again later</p>
 				</div>
@@ -148,7 +151,7 @@ export function ProfileForm() {
 			</div>
 
 			{/* Content Container - Everything scrolls together */}
-			<div className="relative z-10 py-8 px-4 md:py-12">
+			<div className="relative z-10 pt-24 pb-8 px-4 md:pt-28 md:pb-12">
 				<div className="max-w-7xl mx-auto">
 					{/* UNIFIED TAB NAVIGATION */}
 					<div className="flex flex-col md:flex-row justify-center items-center gap-4 mb-12">

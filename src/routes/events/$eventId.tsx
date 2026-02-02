@@ -14,7 +14,8 @@ export const Route = createFileRoute("/events/$eventId")({
 function RouteComponent() {
 	const { eventId } = Route.useParams();
 	const navigate = useNavigate();
-	const { isAuthenticated, isHydrated } = useAuthStore();
+	const { user, isHydrated } = useAuthStore();
+	const isAuthenticated = !!user;
 
 	const {
 		data: event,
