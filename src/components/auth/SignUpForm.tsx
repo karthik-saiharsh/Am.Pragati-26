@@ -326,7 +326,6 @@ const SignUpForm = ({
 							</div> */}
 							<Button
 								type="button"
-								disabled
 								onClick={(e) => {
 									e.preventDefault();
 									nextStep();
