@@ -1,3 +1,4 @@
+import { useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 
 // Helper component for the Typewriter effect
@@ -75,6 +76,7 @@ function HeroSection() {
 		{ label: "Participants", value: "500+" },
 		{ label: "Colleges", value: "15+" },
 	];
+	const navigate = useNavigate();
 
 	return (
 		<section className="relative min-h-screen h-screen max-w-screen w-full flex flex-col items-center">
@@ -198,6 +200,7 @@ function HeroSection() {
                            hover:bg-[#6d28d9] 
                            active:shadow-none active:translate-x-1 active:translate-y-1 
                            transition-all flex items-center gap-2 cursor-pointer"
+							onClick={() => navigate({ to: "/events" })}
 						>
 							Explore Events
 						</motion.button>
