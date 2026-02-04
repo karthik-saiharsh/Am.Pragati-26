@@ -76,7 +76,7 @@ export const EventCard = ({
 			initial={{ opacity: 0, y: 20 }}
 			animate={{ opacity: 1, y: 0 }}
 			transition={{ duration: 0.5 }}
-			className={`group relative w-full aspect-3/4 ${
+			className={`group relative w-full aspect-3/4.5 ${
 				isEventClosed ? "cursor-not-allowed" : "cursor-pointer"
 			}`}
 			onMouseEnter={() => setIsHovered(true)}
