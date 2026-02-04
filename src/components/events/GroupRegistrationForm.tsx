@@ -55,27 +55,34 @@ export function GroupRegistrationForm({
 		control: form.control,
 		name: "teammates",
 	});
-
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const onInvalid = (errors: any) => {
 		console.log("Form validation failed:", errors);
+
 		const messages: string[] = [];
 
-		const collectErrors = (errObj: any) => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const collectErrors = (errObj: any): void => {
 			if (!errObj) return;
+
 			if (errObj.message && typeof errObj.message === "string") {
 				messages.push(errObj.message);
 			}
+
 			if (typeof errObj === "object") {
-				Object.values(errObj).forEach((val) => collectErrors(val));
+				Object.values(errObj).forEach((val) => {
+					collectErrors(val);
+				});
 			}
 		};
 
 		collectErrors(errors);
 
 		// Deduplicate and show
-		[...new Set(messages)].forEach((msg) => toast.error(msg));
+		[...new Set(messages)].forEach((msg) => {
+			toast.error(msg);
+		});
 	};
-
 	const handleSubmit = (values: FormValues) => {
 		console.log("Form valid, submitting:", values);
 		const output: GroupRegistrationOutput = {
