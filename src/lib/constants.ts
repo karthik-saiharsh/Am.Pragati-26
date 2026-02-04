@@ -7,12 +7,12 @@ export const PAYU_URLS = {
 };
 
 // Determine if running in production based on flag
-const IS_PRODUCTION = process.env.NEXT_PUBLIC_IS_PRODUCTION === "1";
+const IS_PRODUCTION = import.meta.env.VITE_IS_PRODUCTION === "1";
 
 // Select appropriate PayU merchant key based on environment
 export const PAYU_MERCHANT_KEY = IS_PRODUCTION
-	? process.env.NEXT_PUBLIC_PAY_U_KEY_PROD || ""
-	: process.env.NEXT_PUBLIC_PAY_U_KEY_TEST || "";
+	? import.meta.env.VITE_PAYU_KEY_PROD || ""
+	: import.meta.env.VITE_PAYU_KEY_TEST || "";
 
 // Select appropriate PayU URL based on environment
 export const PAYU_URL = IS_PRODUCTION ? PAYU_URLS.PROD : PAYU_URLS.TEST;
