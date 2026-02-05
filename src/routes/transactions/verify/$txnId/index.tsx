@@ -1,4 +1,4 @@
-import { createFileRoute} from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import Lottie from "lottie-react";
 import { useEffect } from "react";
 import { useVerifyTransaction } from "@/hooks/useVerifyTransaction";
@@ -19,7 +19,6 @@ function PaymentVerifying() {
 			verifyTransaction({ txn_id: txnId });
 		}
 	}, [txnId, verifyTransaction]);
-
 
 	const getStatusText = () => {
 		if (status === "success" && data?.status === "success") {
@@ -56,46 +55,46 @@ function PaymentVerifying() {
 	const statusText = getStatusText();
 
 	return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-4">
-      <div className="flex items-center justify-center mb-6">
-        <Lottie
-          animationData={animationData}
-          loop
-          autoplay
-          rendererSettings={{
-            preserveAspectRatio: "xMidYMid slice",
-          }}
-          className="h-50 w-50"
-        />
-      </div>
+		<main className="flex min-h-screen flex-col items-center justify-center p-4">
+			<div className="flex items-center justify-center mb-6">
+				<Lottie
+					animationData={animationData}
+					loop
+					autoplay
+					rendererSettings={{
+						preserveAspectRatio: "xMidYMid slice",
+					}}
+					className="h-50 w-50"
+				/>
+			</div>
 
-      <h1
-        className={`text-3xl font-bold mb-2 ${
-          status === "success" && data?.status === "success"
-            ? "text-green-400"
-            : status === "error" || data?.status === "failed"
-              ? "text-destructive"
-              : "text-foreground"
-        }`}
-      >
-        {statusText.title}
-      </h1>
+			<h1
+				className={`text-3xl font-bold mb-2 ${
+					status === "success" && data?.status === "success"
+						? "text-green-400"
+						: status === "error" || data?.status === "failed"
+							? "text-destructive"
+							: "text-foreground"
+				}`}
+			>
+				{statusText.title}
+			</h1>
 
-      <p className="text-lg text-muted-foreground mb-4">
-        {statusText.subtitle}
-      </p>
+			<p className="text-lg text-muted-foreground mb-4">
+				{statusText.subtitle}
+			</p>
 
-      <div className="space-y-2 text-sm text-muted-foreground mb-4">
-        <p>{statusText.description}</p>
-        {txnId && (
-          <p>
-            Transaction ID:{" "}
-            <span className="font-mono font-semibold text-foreground">
-              {txnId}
-            </span>
-          </p>
-        )}
-      </div>
-    </main>
-  );
+			<div className="space-y-2 text-sm text-muted-foreground mb-4">
+				<p>{statusText.description}</p>
+				{txnId && (
+					<p>
+						Transaction ID:{" "}
+						<span className="font-mono font-semibold text-foreground">
+							{txnId}
+						</span>
+					</p>
+				)}
+			</div>
+		</main>
+	);
 }
