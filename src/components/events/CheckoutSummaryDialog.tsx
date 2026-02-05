@@ -7,7 +7,7 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
-import { GST_RATE } from "@/lib/constants";
+// import { GST_RATE } from "@/lib/constants";
 import { formatCurrency } from "@/lib/utilityFunctions";
 
 interface CheckoutSummaryDialogProps {
@@ -30,8 +30,9 @@ export default function CheckoutSummaryDialog({
 	onConfirm,
 }: CheckoutSummaryDialogProps) {
 	const subtotal = unitPrice * quantity;
-	const gstAmount = +(subtotal * GST_RATE);
-	const total = +(subtotal + gstAmount);
+	// const gstAmount = +(subtotal * GST_RATE);
+	// const total = +(subtotal + gstAmount);
+	const total = subtotal;
 
 	const formattedUnit = quantity === 1 ? unit : `${unit}s`;
 
@@ -76,10 +77,10 @@ export default function CheckoutSummaryDialog({
 					</div>
 
 					{/* GST */}
-					<div className="flex items-center justify-between text-sm text-foreground/80">
+					{/* <div className="flex items-center justify-between text-sm text-foreground/80">
 						<div>GST ({GST_RATE * 100}%)</div>
 						<div>{gstAmount === 0 ? "₹0.00" : formatCurrency(gstAmount)}</div>
-					</div>
+					</div> */}
 
 					{/* Total */}
 					<div className="border-t border-border pt-3 flex items-center justify-between">
