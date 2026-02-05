@@ -35,7 +35,6 @@ function EventsPage() {
 	const [selectedDays, setSelectedDays] = useState<string[]>([]);
 
 	/* MUTUAL GROUPS */
-	const [eventType, setEventType] = useState<"workshop" | "event" | null>(null);
 	const [teamType, setTeamType] = useState<"individual" | "group" | null>(null);
 	const [managementType, setManagementType] = useState<
 		"management" | "non-management" | null
@@ -67,7 +66,6 @@ function EventsPage() {
 		setSearch("");
 		setSelectedTags([]);
 		setSelectedDays([]);
-		setEventType(null);
 		setTeamType(null);
 		setManagementType(null);
 		setRegType(null);
@@ -92,11 +90,10 @@ function EventsPage() {
 			result = result.filter((e) => {
 				const eventDate = new Date(e.event_date);
 				const day = eventDate.getDate();
-				// Map Day 1/2/3 to actual dates (15th, 20th, 25th)
+				// Map Day 1/2 to actual dates (20th, 21th)
 				const dayMap: Record<string, number> = {
-					"Day 1": 15,
-					"Day 2": 20,
-					"Day 3": 25,
+					"Day 1": 20,
+					"Day 2": 21,
 				};
 				return selectedDays.some((d) => dayMap[d] === day);
 			});
@@ -107,15 +104,6 @@ function EventsPage() {
 			result = result.filter((e) =>
 				e.tags?.some((t) => selectedTags.includes(t)),
 			);
-		}
-
-		// Event Type filter (Workshop vs Event)
-		if (eventType) {
-			if (eventType === "workshop") {
-				result = result.filter((e) => e.event_type === "workshop");
-			} else {
-				result = result.filter((e) => e.event_type !== "workshop");
-			}
 		}
 
 		// Team Type filter
@@ -151,7 +139,6 @@ function EventsPage() {
 		events,
 		selectedTags,
 		selectedDays,
-		eventType,
 		teamType,
 		managementType,
 		regType,
@@ -281,11 +268,23 @@ function EventsPage() {
 								className="flex-1 px-4 py-2.5 bg-black/40 backdrop-blur-sm border border-retro-cyan/30 text-white font-vcr text-sm tracking-[0.1em] placeholder:text-white/30 focus:border-[#a855f7] focus:ring-1 focus:ring-[#a855f7] transition-all"
 							/>
 
-							<select className="px-4 py-2.5 bg-black/40 backdrop-blur-sm border border-retro-cyan/30 text-retro-cyan font-vcr text-sm tracking-[0.1em]">
-								<option>Relevance</option>
-								<option>Date (Earliest)</option>
-								<option>Date (Latest)</option>
-							</select>
+							<FilterDropdown
+								label="📅 EVENT DAYS"
+								open={daysOpen}
+								setOpen={setDaysOpen}
+								items={["DAY 1", "DAY 2"]}
+								selected={selectedDays}
+								setSelected={setSelectedDays}
+							/>
+
+							<FilterDropdown
+								label="📌 TAGS"
+								open={tagsOpen}
+								setOpen={setTagsOpen}
+								items={["CODING", "GAMING", "AI", "CULTURAL"]}
+								selected={selectedTags}
+								setSelected={setSelectedTags}
+							/>
 
 							<button
 								type="button"
@@ -309,52 +308,15 @@ function EventsPage() {
 								className="relative mt-6 max-w-6xl mx-auto bg-black/60 backdrop-blur-sm border border-retro-cyan/30 p-6 shadow-[0_0_15px_rgba(0,0,0,0.5)]"
 							>
 								{/* Filter Title */}
-								<div className="flex items-center gap-3 mb-6">
+								{/* <div className="flex items-center gap-3 mb-6">
 									<div className="h-0.5 flex-1 bg-gradient-to-r from-transparent to-[#a855f7]/30" />
 									<h3 className="font-vcr text-retro-cyan text-lg md:text-xl uppercase tracking-[0.3em]">
 										FILTERS
 									</h3>
 									<div className="h-0.5 flex-1 bg-gradient-to-l from-transparent to-[#a855f7]/30" />
-								</div>
-
-								{/* Dropdowns */}
-								<div className="flex flex-wrap gap-3 mb-4">
-									<FilterDropdown
-										label="📌 Tags"
-										open={tagsOpen}
-										setOpen={setTagsOpen}
-										items={["Coding", "Gaming", "AI", "Cultural"]}
-										selected={selectedTags}
-										setSelected={setSelectedTags}
-									/>
-
-									<FilterDropdown
-										label="📅 Event Days"
-										open={daysOpen}
-										setOpen={setDaysOpen}
-										items={["Day 1", "Day 2", "Day 3"]}
-										selected={selectedDays}
-										setSelected={setSelectedDays}
-									/>
-								</div>
+								</div> */}
 
 								<div className="flex flex-wrap gap-4 md:gap-6 items-end">
-									<div className="flex flex-col items-start">
-										<div className="flex items-center gap-2 mb-1">
-											<div className="h-0.5 w-4 bg-[#a855f7]" />
-											<span className="font-vcr text-[9px] text-[#a855f7] tracking-widest uppercase">
-												TYPE
-											</span>
-										</div>
-										<FilterRadioPair
-											a="Workshop"
-											b="Event"
-											value={eventType}
-											setValue={(v) =>
-												setEventType(v as "event" | "workshop" | null)
-											}
-										/>
-									</div>
 									<div className="flex flex-col items-start">
 										<div className="flex items-center gap-2 mb-1">
 											<div className="h-0.5 w-4 bg-[#a855f7]" />
@@ -363,8 +325,8 @@ function EventsPage() {
 											</span>
 										</div>
 										<FilterRadioPair
-											a="Individual"
-											b="Group"
+											a="INDIVIDUAL"
+											b="GROUP"
 											value={teamType}
 											setValue={(v) =>
 												setTeamType(v as "individual" | "group" | null)
@@ -379,8 +341,8 @@ function EventsPage() {
 											</span>
 										</div>
 										<FilterRadioPair
-											a="Management"
-											b="Non-Management"
+											a="MANAGEMENT"
+											b="NON-MANAGEMENT"
 											value={managementType}
 											setValue={(v) =>
 												setManagementType(
@@ -397,8 +359,8 @@ function EventsPage() {
 											</span>
 										</div>
 										<FilterRadioPair
-											a="Registered"
-											b="Not Registered"
+											a="REGISTERED"
+											b="NOT REGISTERED"
 											value={regType}
 											setValue={(v) =>
 												setRegType(v as "registered" | "not-registered" | null)
@@ -443,7 +405,6 @@ function EventsPage() {
 									{search ||
 									selectedTags.length > 0 ||
 									selectedDays.length > 0 ||
-									eventType ||
 									teamType ||
 									managementType ||
 									regType
@@ -453,7 +414,6 @@ function EventsPage() {
 								{(search ||
 									selectedTags.length > 0 ||
 									selectedDays.length > 0 ||
-									eventType ||
 									teamType ||
 									managementType ||
 									regType) && (
