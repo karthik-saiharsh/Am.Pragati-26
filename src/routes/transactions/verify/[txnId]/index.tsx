@@ -1,10 +1,9 @@
 import { createFileRoute, createRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
 import Lottie from "react-lottie";
-import { GlassFormWrapper } from "@/components/GlassFormWrapper";
 import { useVerifyTransaction } from "@/hooks/useVerifyTransaction";
 // Import your verifying animation
-import animationData from "@/public/lotties/transactionVerify.json";
+import animationData from "../../../../../public/lotties/transactionVerify.json";
 
 export const Route = createRoute("/transactions/verify/txnId/")({
 	path: "/transactions/verify/$txnId",
@@ -66,7 +65,6 @@ function PaymentVerifying() {
 
 	return (
 		<main className="flex min-h-screen flex-col items-center justify-center p-4">
-			<GlassFormWrapper className="max-w-lg w-full text-center">
 				<div className="flex items-center justify-center mb-6">
 					<Lottie options={defaultOptions} height={200} width={200} />
 				</div>
@@ -98,7 +96,6 @@ function PaymentVerifying() {
 						</p>
 					)}
 				</div>
-			</GlassFormWrapper>
 		</main>
 	);
 }

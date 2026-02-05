@@ -1,10 +1,8 @@
 import { createFileRoute, createRoute, Link } from "@tanstack/react-router";
-import React from "react";
 import Lottie from "react-lottie";
-import { GlassFormWrapper } from "@/components/GlassFormWrapper";
 import { Button } from "@/components/ui/button";
 // Import your pending animation
-import animationData from "@/public/lotties/transactionPending.json";
+import animationData from "../../../../public/lotties/transactionPending.json";
 
 export const Route = createRoute("/transactions/pending/")({
 	path: "/transactions/pending",
@@ -23,7 +21,6 @@ function PaymentPending() {
 
 	return (
 		<main className="flex min-h-screen flex-col items-center justify-center p-4">
-			<GlassFormWrapper className="max-w-lg w-full text-center">
 				<div className="flex items-center justify-center mb-6">
 					<Lottie options={defaultOptions} height={200} width={200} />
 				</div>
@@ -58,7 +55,6 @@ function PaymentPending() {
 						</Button>
 					</Link>
 				</div>
-			</GlassFormWrapper>
 		</main>
 	);
 }

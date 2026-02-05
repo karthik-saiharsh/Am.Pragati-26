@@ -1,10 +1,8 @@
 import { createFileRoute, createRoute, Link } from "@tanstack/react-router";
-import React, { useState } from "react";
 import Lottie from "react-lottie";
-import { GlassFormWrapper } from "@/components/GlassFormWrapper";
 import { Button } from "@/components/ui/button";
 // Import your success animation
-import animationData from "@/public/lotties/transactionSuccess.json";
+import animationData from "../../../../public/lotties/transactionSuccess.json";
 
 export const Route = createRoute("/transactions/success/")({
 	path: "/transactions/success",
@@ -23,7 +21,6 @@ function PaymentSuccess() {
 
 	return (
 		<main className="flex min-h-screen flex-col items-center justify-center p-4">
-			<GlassFormWrapper className="max-w-md w-full text-center">
 				<div className="flex items-center justify-center mb-6">
 					<Lottie options={defaultOptions} height={200} width={200} />
 				</div>
@@ -49,7 +46,6 @@ function PaymentSuccess() {
 						</Button>
 					</Link>
 				</div>
-			</GlassFormWrapper>
 		</main>
 	);
 }
