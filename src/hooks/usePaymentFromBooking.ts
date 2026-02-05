@@ -37,8 +37,8 @@ export function usePaymentFromBooking() {
 		// const failureUrl = `${baseUrl}/api/transactions/failure`;
 
 		// Frontend base URL (for redirects later)
-		const frontendBaseUrl =
-			import.meta.env.VITE_APP_URL || window.location.origin;
+		// const frontendBaseUrl =
+		// 	import.meta.env.VITE_APP_URL || window.location.origin;
 
 		// Backend base URL (for PayU callbacks)
 		const backendBaseUrl =

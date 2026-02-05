@@ -14,15 +14,15 @@ export const failureRoute = new Elysia()
 
 			// Extract PayU response data
 			const txnId = formData.get("txnid") as string;
-			const status = formData.get("status") as string;
-			const amount = formData.get("amount") as string;
-			const error = formData.get("error") as string;
-			const errorMessage = formData.get("error_Message") as string;
-			const firstname = formData.get("firstname") as string;
-			const email = formData.get("email") as string;
-			const productinfo = formData.get("productinfo") as string;
-			const mihpayid = formData.get("mihpayid") as string;
-			const mode = formData.get("mode") as string;
+			// const status = formData.get("status") as string;
+			// const amount = formData.get("amount") as string;
+			// const error = formData.get("error") as string;
+			// const errorMessage = formData.get("error_Message") as string;
+			// const firstname = formData.get("firstname") as string;
+			// const email = formData.get("email") as string;
+			// const productinfo = formData.get("productinfo") as string;
+			// const mihpayid = formData.get("mihpayid") as string;
+			// const mode = formData.get("mode") as string;
 
 			// Redirect to failure page with transaction ID
 			const baseUrl =

@@ -18,7 +18,7 @@ export function useBookIndividualEvent() {
 		mutationFn: async (eventId: string): Promise<BookingResponse> => {
 			return BookingService.bookIndividualEvent(eventId);
 		},
-		onSuccess: (data) => {
+		onSuccess: () => {
 			// Show success message from booking
 			toast.loading("Booking initiated! Redirecting to payment...");
 		},
@@ -44,7 +44,7 @@ export function useBookGroupEvent() {
 		}): Promise<BookingResponse> => {
 			return BookingService.bookGroupEvent(eventId, payload);
 		},
-		onSuccess: (data) => {
+		onSuccess: () => {
 			// Show success message from booking
 			toast.loading("Booking initiated! Redirecting to payment...");
 		},
