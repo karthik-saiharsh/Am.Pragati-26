@@ -49,13 +49,9 @@ export const EventService = {
 			const filteredTags =
 				tags?.filter((tag: string) => !tag.startsWith("!")) || [];
 
-			const finalTags = Array.isArray(organizers)
-				? [...organizers, ...filteredTags]
-				: filteredTags;
-
 			return {
 				...rest,
-				tags: finalTags,
+				tags: filteredTags,
 				isStarred: is_starred,
 			} as Event;
 		});
