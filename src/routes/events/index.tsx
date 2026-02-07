@@ -92,9 +92,19 @@ function EventsPage() {
 				const day = eventDate.getDate();
 				// Map Day 1/2 to actual dates (20th, 21th)
 				const dayMap: Record<string, number> = {
-					"Day 1": 20,
-					"Day 2": 21,
+					"20TH FEB": 20,
+					"21ST FEB": 21,
 				};
+				console.log(
+					"Filtering by days:",
+					selectedDays,
+					"Event date:",
+					eventDate,
+					"Day:",
+					day,
+					"daymap:",
+					dayMap,
+				);
 				return selectedDays.some((d) => dayMap[d] === day);
 			});
 		}
@@ -272,7 +282,7 @@ function EventsPage() {
 								label="📅 EVENT DAYS"
 								open={daysOpen}
 								setOpen={setDaysOpen}
-								items={["DAY 1", "DAY 2"]}
+								items={["20TH FEB", "21ST FEB"]}
 								selected={selectedDays}
 								setSelected={setSelectedDays}
 							/>
