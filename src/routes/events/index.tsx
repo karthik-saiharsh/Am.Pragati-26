@@ -29,13 +29,10 @@ function EventsPage() {
 	const [showFilters, setShowFilters] = useState(false);
 
 	/* DROPDOWNS */
-	const [tagsOpen, setTagsOpen] = useState(false);
 	const [daysOpen, setDaysOpen] = useState(false);
-	const [selectedTags, setSelectedTags] = useState<string[]>([]);
 	const [selectedDays, setSelectedDays] = useState<string[]>([]);
 
 	/* MUTUAL GROUPS */
-	const [eventType, setEventType] = useState<"workshop" | "event" | null>(null);
 	const [teamType, setTeamType] = useState<"individual" | "group" | null>(null);
 	const [managementType, setManagementType] = useState<
 		"management" | "non-management" | null
@@ -65,9 +62,7 @@ function EventsPage() {
 	/* CLEAR ALL */
 	const clearAll = () => {
 		setSearch("");
-		setSelectedTags([]);
 		setSelectedDays([]);
-		setEventType(null);
 		setTeamType(null);
 		setManagementType(null);
 		setRegType(null);
@@ -97,25 +92,8 @@ function EventsPage() {
 					"20TH FEB": 20,
 					"21ST FEB": 21,
 				};
-				console.log(
-					"Filtering by days:",
-					selectedDays,
-					"Event date:",
-					eventDate,
-					"Day:",
-					day,
-					"daymap:",
-					dayMap,
-				);
 				return selectedDays.some((d) => dayMap[d] === day);
 			});
-		}
-
-		// Tags filter
-		if (selectedTags.length > 0) {
-			result = result.filter((e) =>
-				e.tags?.some((t) => selectedTags.includes(t)),
-			);
 		}
 
 		// Team Type filter
@@ -145,16 +123,13 @@ function EventsPage() {
 			}
 		}
 
+		result.sort((a, b) => {
+			if (a.isStarred === b.isStarred) return 0;
+			return a.isStarred ? -1 : 1;
+		});
+
 		return result;
-	}, [
-		search,
-		events,
-		selectedTags,
-		selectedDays,
-		teamType,
-		managementType,
-		regType,
-	]);
+	}, [search, events, selectedDays, teamType, managementType, regType]);
 
 	if (isLoading) {
 		return (
@@ -289,15 +264,6 @@ function EventsPage() {
 								setSelected={setSelectedDays}
 							/>
 
-							<FilterDropdown
-								label="📌 TAGS"
-								open={tagsOpen}
-								setOpen={setTagsOpen}
-								items={["CODING", "GAMING", "AI", "CULTURAL"]}
-								selected={selectedTags}
-								setSelected={setSelectedTags}
-							/>
-
 							<button
 								type="button"
 								onClick={() => setShowFilters((v) => !v)}
@@ -319,15 +285,6 @@ function EventsPage() {
 								transition={{ duration: 0.3 }}
 								className="relative mt-6 max-w-6xl mx-auto bg-black/60 backdrop-blur-sm border border-retro-cyan/30 p-6 shadow-[0_0_15px_rgba(0,0,0,0.5)]"
 							>
-								{/* Filter Title */}
-								{/* <div className="flex items-center gap-3 mb-6">
-									<div className="h-0.5 flex-1 bg-gradient-to-r from-transparent to-[#a855f7]/30" />
-									<h3 className="font-vcr text-retro-cyan text-lg md:text-xl uppercase tracking-[0.3em]">
-										FILTERS
-									</h3>
-									<div className="h-0.5 flex-1 bg-gradient-to-l from-transparent to-[#a855f7]/30" />
-								</div> */}
-
 								<div className="flex flex-wrap gap-4 md:gap-6 items-end">
 									<div className="flex flex-col items-start">
 										<div className="flex items-center gap-2 mb-1">
@@ -415,9 +372,7 @@ function EventsPage() {
 								</div>
 								<p className="font-vcr text-gray-400 text-lg mb-8">
 									{search ||
-									selectedTags.length > 0 ||
 									selectedDays.length > 0 ||
-									eventType ||
 									teamType ||
 									managementType ||
 									regType
@@ -425,9 +380,7 @@ function EventsPage() {
 										: "No events available at the moment"}
 								</p>
 								{(search ||
-									selectedTags.length > 0 ||
 									selectedDays.length > 0 ||
-									eventType ||
 									teamType ||
 									managementType ||
 									regType) && (
