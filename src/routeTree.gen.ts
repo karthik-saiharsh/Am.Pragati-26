@@ -27,7 +27,7 @@ import { Route as ForgotPasswordIndexRouteImport } from './routes/forgot-passwor
 import { Route as EventsIndexRouteImport } from './routes/events/index'
 import { Route as ComingSoonIndexRouteImport } from './routes/coming-soon/index'
 import { Route as BrochureIndexRouteImport } from './routes/brochure/index'
-import { Route as AccomodationIndexRouteImport } from './routes/accomodation/index'
+import { Route as AccommodationIndexRouteImport } from './routes/accommodation/index'
 import { Route as SignupVerifyRouteImport } from './routes/signup/verify'
 import { Route as ResetPasswordVerifyRouteImport } from './routes/reset-password/verify'
 import { Route as EventsEventIdRouteImport } from './routes/events/$eventId'
@@ -126,9 +126,9 @@ const BrochureIndexRoute = BrochureIndexRouteImport.update({
   path: '/brochure/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AccomodationIndexRoute = AccomodationIndexRouteImport.update({
-  id: '/accomodation/',
-  path: '/accomodation/',
+const AccommodationIndexRoute = AccommodationIndexRouteImport.update({
+  id: '/accommodation/',
+  path: '/accommodation/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SignupVerifyRoute = SignupVerifyRouteImport.update({
@@ -178,7 +178,7 @@ export interface FileRoutesByFullPath {
   '/events/$eventId': typeof EventsEventIdRoute
   '/reset-password/verify': typeof ResetPasswordVerifyRoute
   '/signup/verify': typeof SignupVerifyRoute
-  '/accomodation/': typeof AccomodationIndexRoute
+  '/accommodation/': typeof AccommodationIndexRoute
   '/brochure/': typeof BrochureIndexRoute
   '/coming-soon/': typeof ComingSoonIndexRoute
   '/events/': typeof EventsIndexRoute
@@ -206,7 +206,7 @@ export interface FileRoutesByTo {
   '/events/$eventId': typeof EventsEventIdRoute
   '/reset-password/verify': typeof ResetPasswordVerifyRoute
   '/signup/verify': typeof SignupVerifyRoute
-  '/accomodation': typeof AccomodationIndexRoute
+  '/accommodation': typeof AccommodationIndexRoute
   '/brochure': typeof BrochureIndexRoute
   '/coming-soon': typeof ComingSoonIndexRoute
   '/events': typeof EventsIndexRoute
@@ -235,7 +235,7 @@ export interface FileRoutesById {
   '/events/$eventId': typeof EventsEventIdRoute
   '/reset-password/verify': typeof ResetPasswordVerifyRoute
   '/signup/verify': typeof SignupVerifyRoute
-  '/accomodation/': typeof AccomodationIndexRoute
+  '/accommodation/': typeof AccommodationIndexRoute
   '/brochure/': typeof BrochureIndexRoute
   '/coming-soon/': typeof ComingSoonIndexRoute
   '/events/': typeof EventsIndexRoute
@@ -265,7 +265,7 @@ export interface FileRouteTypes {
     | '/events/$eventId'
     | '/reset-password/verify'
     | '/signup/verify'
-    | '/accomodation/'
+    | '/accommodation/'
     | '/brochure/'
     | '/coming-soon/'
     | '/events/'
@@ -293,7 +293,7 @@ export interface FileRouteTypes {
     | '/events/$eventId'
     | '/reset-password/verify'
     | '/signup/verify'
-    | '/accomodation'
+    | '/accommodation'
     | '/brochure'
     | '/coming-soon'
     | '/events'
@@ -321,7 +321,7 @@ export interface FileRouteTypes {
     | '/events/$eventId'
     | '/reset-password/verify'
     | '/signup/verify'
-    | '/accomodation/'
+    | '/accommodation/'
     | '/brochure/'
     | '/coming-soon/'
     | '/events/'
@@ -350,7 +350,7 @@ export interface RootRouteChildren {
   EventsEventIdRoute: typeof EventsEventIdRoute
   ResetPasswordVerifyRoute: typeof ResetPasswordVerifyRoute
   SignupVerifyRoute: typeof SignupVerifyRoute
-  AccomodationIndexRoute: typeof AccomodationIndexRoute
+  AccommodationIndexRoute: typeof AccommodationIndexRoute
   BrochureIndexRoute: typeof BrochureIndexRoute
   ComingSoonIndexRoute: typeof ComingSoonIndexRoute
   EventsIndexRoute: typeof EventsIndexRoute
@@ -500,11 +500,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BrochureIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/accomodation/': {
-      id: '/accomodation/'
-      path: '/accomodation'
-      fullPath: '/accomodation/'
-      preLoaderRoute: typeof AccomodationIndexRouteImport
+    '/accommodation/': {
+      id: '/accommodation/'
+      path: '/accommodation'
+      fullPath: '/accommodation/'
+      preLoaderRoute: typeof AccommodationIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/signup/verify': {
@@ -566,7 +566,7 @@ const rootRouteChildren: RootRouteChildren = {
   EventsEventIdRoute: EventsEventIdRoute,
   ResetPasswordVerifyRoute: ResetPasswordVerifyRoute,
   SignupVerifyRoute: SignupVerifyRoute,
-  AccomodationIndexRoute: AccomodationIndexRoute,
+  AccommodationIndexRoute: AccommodationIndexRoute,
   BrochureIndexRoute: BrochureIndexRoute,
   ComingSoonIndexRoute: ComingSoonIndexRoute,
   EventsIndexRoute: EventsIndexRoute,
