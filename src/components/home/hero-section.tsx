@@ -194,10 +194,12 @@ function HeroSection() {
 									20-21 FEB 2026
 								</span>
 								<div className="hidden md:block w-px h-4 bg-retro-cyan/40" />
-								<span className="mx-2 md:hidden font-vcr text-sm text-retro-cyan">									|
+								<span className="mx-2 md:hidden font-vcr text-sm text-retro-cyan">
+									{" "}
+									|
 								</span>
 								<span className="font-vcr text-sm md:text-base tracking-rita School oftight">
-									📍  Amrita School of Business, Coimbatore
+									📍 Amrita School of Business, Coimbatore
 								</span>
 							</div>
 						</div>
