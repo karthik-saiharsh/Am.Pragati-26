@@ -10,14 +10,17 @@ export const Route = createFileRoute("/accommodation/")({
 function RouteComponent() {
 	const [step, setStep] = useState<1 | 2>(1);
 	const [gender, setGender] = useState<"male" | "female" | null>(null);
-	const [accommodationType, setAccommodationType] = useState<
-		"single" | "shared" | null
-	>(null);
+	const [accommodationType, setAccommodationType] = useState<"shared" | null>(
+		null,
+	);
+	const [rollNumber, setRollNumber] = useState("");
+	const [checkInDate, setCheckInDate] = useState("");
+	const [checkOutDate, setCheckOutDate] = useState("");
 	const [termsAccepted, setTermsAccepted] = useState(false);
 
 	const handleProceedToTerms = (e: React.FormEvent) => {
 		e.preventDefault();
-		if (gender && accommodationType) {
+		if (gender && accommodationType && rollNumber && checkInDate && checkOutDate) {
 			setStep(2);
 		}
 	};
@@ -25,7 +28,14 @@ function RouteComponent() {
 	const handleFinalSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 		if (termsAccepted) {
-			console.log({ gender, accommodationType, termsAccepted });
+			console.log({
+				gender,
+				accommodationType,
+				rollNumber,
+				checkInDate,
+				checkOutDate,
+				termsAccepted,
+			});
 			// TODO: Submit to backend
 		}
 	};
@@ -102,7 +112,7 @@ function RouteComponent() {
 										onClick={() => setGender("male")}
 									>
 										<img
-											src="/accomodation/male-avatar.png"
+											src="/accomodation/male-avatar.webp"
 											alt="Male"
 											className="w-28 h-28 object-contain"
 										/>
@@ -117,7 +127,7 @@ function RouteComponent() {
 										onClick={() => setGender("female")}
 									>
 										<img
-											src="/accomodation/female-avatar.png"
+											src="/accomodation/female-avatar.webp"
 											alt="Female"
 											className="w-28 h-28 object-contain"
 										/>
@@ -139,18 +149,6 @@ function RouteComponent() {
 										whileHover={{ scale: 1.05 }}
 										whileTap={{ scale: 0.95 }}
 										type="button"
-										onClick={() => setAccommodationType("single")}
-										className={`px-6 py-2 border-2 border-cyan-400 text-xl font-jersey tracking-wide transition-all duration-300 ${accommodationType === "single"
-											? "bg-cyan-400 text-black shadow-[0_0_15px_#22d3ee] scale-105"
-											: "text-cyan-400 hover:bg-cyan-400/10 hover:shadow-[0_0_10px_#22d3ee66]"
-											}`}
-									>
-										Single Occupancy
-									</motion.button>
-									<motion.button
-										whileHover={{ scale: 1.05 }}
-										whileTap={{ scale: 0.95 }}
-										type="button"
 										onClick={() => setAccommodationType("shared")}
 										className={`px-6 py-2 border-2 border-cyan-400 text-xl font-jersey tracking-wide transition-all duration-300 ${accommodationType === "shared"
 											? "bg-cyan-400 text-black shadow-[0_0_15px_#22d3ee] scale-105"
@@ -162,15 +160,73 @@ function RouteComponent() {
 								</div>
 							</motion.div>
 
+							{/* Roll Number Input */}
+							<motion.div
+								initial={{ opacity: 0, y: 30 }}
+								animate={{ opacity: 1, y: 0 }}
+								transition={{ duration: 0.5, delay: 1.0 }}
+								className="flex flex-col items-center gap-4 w-full max-w-md"
+							>
+								<span className="text-2xl">College Roll Number</span>
+								<input
+									type="text"
+									value={rollNumber}
+									onChange={(e) => setRollNumber(e.target.value)}
+									placeholder="Enter your roll number"
+									className="w-full px-4 py-2 bg-black/50 border-2 border-cyan-400 text-zinc-200 text-lg font-sans placeholder-zinc-500 focus:outline-none focus:shadow-[0_0_15px_#22d3ee] transition-all duration-300"
+									required
+								/>
+							</motion.div>
+
+							{/* Check-in Date/Time */}
+							<motion.div
+								initial={{ opacity: 0, y: 30 }}
+								animate={{ opacity: 1, y: 0 }}
+								transition={{ duration: 0.5, delay: 1.2 }}
+								className="flex flex-col items-center gap-4 w-full max-w-md"
+							>
+								<span className="text-2xl">Check-in Date & Time</span>
+								<input
+									type="datetime-local"
+									value={checkInDate}
+									onChange={(e) => setCheckInDate(e.target.value)}
+									className="w-full px-4 py-2 bg-black/50 border-2 border-cyan-400 text-zinc-200 text-lg font-sans focus:outline-none focus:shadow-[0_0_15px_#22d3ee] transition-all duration-300"
+									required
+								/>
+								<p className="text-sm text-zinc-400 text-center text-shadow-none">
+									Check-in available from 1 evening prior at 6:00 PM
+								</p>
+							</motion.div>
+
+							{/* Check-out Date/Time */}
+							<motion.div
+								initial={{ opacity: 0, y: 30 }}
+								animate={{ opacity: 1, y: 0 }}
+								transition={{ duration: 0.5, delay: 1.4 }}
+								className="flex flex-col items-center gap-4 w-full max-w-md"
+							>
+								<span className="text-2xl">Check-out Date & Time</span>
+								<input
+									type="datetime-local"
+									value={checkOutDate}
+									onChange={(e) => setCheckOutDate(e.target.value)}
+									className="w-full px-4 py-2 bg-black/50 border-2 border-cyan-400 text-zinc-200 text-lg font-sans focus:outline-none focus:shadow-[0_0_15px_#22d3ee] transition-all duration-300"
+									required
+								/>
+								<p className="text-sm text-zinc-400 text-center text-shadow-none">
+									Check-out available till 1 day extra at 7:00 AM
+								</p>
+							</motion.div>
+
 							<motion.button
 								initial={{ opacity: 0, scale: 0.5 }}
 								animate={{ opacity: 1, scale: 1 }}
-								transition={{ duration: 0.5, delay: 1, type: "spring" }}
+								transition={{ duration: 0.5, delay: 1.6, type: "spring" }}
 								whileHover={{ scale: 1.05 }}
 								whileTap={{ scale: 0.95 }}
 								type="submit"
-								disabled={!gender || !accommodationType}
-								className={`mt-4 px-10 py-3 text-2xl font-jersey tracking-wider border-2 transition-all duration-300 transform ${!gender || !accommodationType
+								disabled={!gender || !accommodationType || !rollNumber || !checkInDate || !checkOutDate}
+								className={`mt-4 px-10 py-3 text-2xl font-jersey tracking-wider border-2 transition-all duration-300 transform ${!gender || !accommodationType || !rollNumber || !checkInDate || !checkOutDate
 									? "bg-gray-600 border-gray-500 text-gray-400 cursor-not-allowed opacity-50"
 									: "bg-purple-600 hover:bg-purple-500 text-white border-purple-400 shadow-[0_0_15px_var(--color-purple-500)] hover:shadow-[0_0_25px_var(--color-purple-400)]"
 									}`}
