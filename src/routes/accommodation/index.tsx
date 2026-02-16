@@ -14,29 +14,109 @@ function RouteComponent() {
 		null,
 	);
 	const [rollNumber, setRollNumber] = useState("");
+	const [collegeName, setCollegeName] = useState("");
 	const [checkInDate, setCheckInDate] = useState("");
 	const [checkOutDate, setCheckOutDate] = useState("");
 	const [termsAccepted, setTermsAccepted] = useState(false);
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [submitError, setSubmitError] = useState<string | null>(null);
+	const [submitSuccess, setSubmitSuccess] = useState(false);
+
+	// Helper function to check if college is Amrita campus
+	const isAmritaCampus = (college: string): boolean => {
+		return college.toLowerCase().includes("amrita");
+	};
+
+	// Helper function to transform form data to API payload
+	const transformFormData = () => {
+		// Split datetime-local format (YYYY-MM-DDTHH:MM) into date and time
+		const [checkInDatePart, checkInTimePart] = checkInDate.split("T");
+		const [checkOutDatePart, checkOutTimePart] = checkOutDate.split("T");
+
+		const isAmrita = isAmritaCampus(collegeName);
+
+		const payload: any = {
+			is_amrita_campus: isAmrita,
+			is_male: gender === "male",
+			is_hosteller: false,
+			room_preference: "4 sharing",
+			check_in_date: checkInDatePart,
+			check_in_time: checkInTimePart,
+			check_out_date: checkOutDatePart,
+			check_out_time: checkOutTimePart,
+			college_name: collegeName,
+			college_roll_number: rollNumber,
+		};
+
+		return payload;
+	};
 
 	const handleProceedToTerms = (e: React.FormEvent) => {
 		e.preventDefault();
-		if (gender && accommodationType && rollNumber && checkInDate && checkOutDate) {
+		if (
+			gender &&
+			accommodationType &&
+			rollNumber &&
+			collegeName &&
+			checkInDate &&
+			checkOutDate
+		) {
 			setStep(2);
 		}
 	};
 
-	const handleFinalSubmit = (e: React.FormEvent) => {
+	const handleFinalSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		if (termsAccepted) {
-			console.log({
-				gender,
-				accommodationType,
-				rollNumber,
-				checkInDate,
-				checkOutDate,
-				termsAccepted,
+
+		if (!termsAccepted) {
+			return;
+		}
+
+		// Reset previous states
+		setSubmitError(null);
+		setSubmitSuccess(false);
+		setIsSubmitting(true);
+
+		try {
+			// Transform form data to API payload
+			const payload = transformFormData();
+
+			// console.log("Submitting payload:", payload);
+
+			// API request
+			const response = await fetch("/api/v1/accommodation/", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(payload),
 			});
-			// TODO: Submit to backend
+
+			if (!response.ok) {
+				const errorData = await response.json().catch(() => ({}));
+				throw new Error(
+					errorData.message || `Server error: ${response.status}`,
+				);
+			}
+
+			const data = await response.json();
+
+			// Set success state
+			setSubmitSuccess(true);
+			setSubmitError(null);
+
+			// Optional: Reset form or redirect after success
+			// You can add navigation logic here if needed
+		} catch (error) {
+			console.error("Submission error:", error);
+			setSubmitError(
+				error instanceof Error
+					? error.message
+					: "Failed to submit accommodation request. Please try again.",
+			);
+			setSubmitSuccess(false);
+		} finally {
+			setIsSubmitting(false);
 		}
 	};
 
@@ -178,11 +258,29 @@ function RouteComponent() {
 								/>
 							</motion.div>
 
-							{/* Check-in Date/Time */}
+							{/* College Name Input */}
 							<motion.div
 								initial={{ opacity: 0, y: 30 }}
 								animate={{ opacity: 1, y: 0 }}
 								transition={{ duration: 0.5, delay: 1.2 }}
+								className="flex flex-col items-center gap-4 w-full max-w-md"
+							>
+								<span className="text-2xl">College Name</span>
+								<input
+									type="text"
+									value={collegeName}
+									onChange={(e) => setCollegeName(e.target.value)}
+									placeholder="Enter your college name"
+									className="w-full px-4 py-2 bg-black/50 border-2 border-cyan-400 text-zinc-200 text-lg font-sans placeholder-zinc-500 focus:outline-none focus:shadow-[0_0_15px_#22d3ee] transition-all duration-300"
+									required
+								/>
+							</motion.div>
+
+							{/* Check-in Date & Time */}
+							<motion.div
+								initial={{ opacity: 0, y: 30 }}
+								animate={{ opacity: 1, y: 0 }}
+								transition={{ duration: 0.5, delay: 1.4 }}
 								className="flex flex-col items-center gap-4 w-full max-w-md"
 							>
 								<span className="text-2xl">Check-in Date & Time</span>
@@ -202,7 +300,7 @@ function RouteComponent() {
 							<motion.div
 								initial={{ opacity: 0, y: 30 }}
 								animate={{ opacity: 1, y: 0 }}
-								transition={{ duration: 0.5, delay: 1.4 }}
+								transition={{ duration: 0.5, delay: 1.6 }}
 								className="flex flex-col items-center gap-4 w-full max-w-md"
 							>
 								<span className="text-2xl">Check-out Date & Time</span>
@@ -221,12 +319,24 @@ function RouteComponent() {
 							<motion.button
 								initial={{ opacity: 0, scale: 0.5 }}
 								animate={{ opacity: 1, scale: 1 }}
-								transition={{ duration: 0.5, delay: 1.6, type: "spring" }}
+								transition={{ duration: 0.5, delay: 1.8, type: "spring" }}
 								whileHover={{ scale: 1.05 }}
 								whileTap={{ scale: 0.95 }}
 								type="submit"
-								disabled={!gender || !accommodationType || !rollNumber || !checkInDate || !checkOutDate}
-								className={`mt-4 px-10 py-3 text-2xl font-jersey tracking-wider border-2 transition-all duration-300 transform ${!gender || !accommodationType || !rollNumber || !checkInDate || !checkOutDate
+								disabled={
+									!gender ||
+									!accommodationType ||
+									!rollNumber ||
+									!collegeName ||
+									!checkInDate ||
+									!checkOutDate
+								}
+								className={`mt-4 px-10 py-3 text-2xl font-jersey tracking-wider border-2 transition-all duration-300 transform ${!gender ||
+									!accommodationType ||
+									!rollNumber ||
+									!collegeName ||
+									!checkInDate ||
+									!checkOutDate
 									? "bg-gray-600 border-gray-500 text-gray-400 cursor-not-allowed opacity-50"
 									: "bg-purple-600 hover:bg-purple-500 text-white border-purple-400 shadow-[0_0_15px_var(--color-purple-500)] hover:shadow-[0_0_25px_var(--color-purple-400)]"
 									}`}
@@ -351,6 +461,28 @@ function RouteComponent() {
 								</span>
 							</motion.div>
 
+							{/* Error Message */}
+							{submitError && (
+								<motion.div
+									initial={{ opacity: 0, y: -10 }}
+									animate={{ opacity: 1, y: 0 }}
+									className="w-full max-w-md px-4 py-3 bg-red-500/20 border border-red-500 text-red-300 text-center text-shadow-none rounded"
+								>
+									{submitError}
+								</motion.div>
+							)}
+
+							{/* Success Message */}
+							{submitSuccess && (
+								<motion.div
+									initial={{ opacity: 0, y: -10 }}
+									animate={{ opacity: 1, y: 0 }}
+									className="w-full max-w-md px-4 py-3 bg-green-500/20 border border-green-500 text-green-300 text-center text-shadow-none rounded"
+								>
+									Accommodation request submitted successfully!
+								</motion.div>
+							)}
+
 							{/* Navigation Buttons */}
 							<div className="flex gap-4 mt-2">
 								<motion.button
@@ -360,8 +492,13 @@ function RouteComponent() {
 									whileHover={{ scale: 1.05 }}
 									whileTap={{ scale: 0.95 }}
 									type="button"
-									onClick={() => setStep(1)}
-									className="px-8 py-3 text-xl font-jersey tracking-wider border-2 border-cyan-400 text-cyan-400 hover:bg-cyan-400/10 transition-all duration-300"
+									onClick={() => {
+										setStep(1);
+										setSubmitError(null);
+										setSubmitSuccess(false);
+									}}
+									disabled={isSubmitting}
+									className="px-8 py-3 text-xl font-jersey tracking-wider border-2 border-cyan-400 text-cyan-400 hover:bg-cyan-400/10 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
 								>
 									BACK
 								</motion.button>
@@ -372,13 +509,13 @@ function RouteComponent() {
 									whileHover={{ scale: 1.05 }}
 									whileTap={{ scale: 0.95 }}
 									type="submit"
-									disabled={!termsAccepted}
-									className={`px-8 py-3 text-xl font-jersey tracking-wider border-2 transition-all duration-300 transform ${!termsAccepted
+									disabled={!termsAccepted || isSubmitting}
+									className={`px-8 py-3 text-xl font-jersey tracking-wider border-2 transition-all duration-300 transform ${!termsAccepted || isSubmitting
 										? "bg-gray-600 border-gray-500 text-gray-400 cursor-not-allowed opacity-50"
 										: "bg-purple-600 hover:bg-purple-500 text-white border-purple-400 shadow-[0_0_15px_var(--color-purple-500)] hover:shadow-[0_0_25px_var(--color-purple-400)]"
 										}`}
 								>
-									SUBMIT
+									{isSubmitting ? "SUBMITTING..." : "SUBMIT"}
 								</motion.button>
 							</div>
 						</form>
