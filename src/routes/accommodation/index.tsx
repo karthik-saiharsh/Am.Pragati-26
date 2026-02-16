@@ -7,6 +7,20 @@ export const Route = createFileRoute("/accommodation/")({
 	component: RouteComponent,
 });
 
+// Type Declaration for form Payload
+interface TFormPayload {
+	is_amrita_campus: boolean;
+	is_male: boolean;
+	is_hosteller: boolean;
+	room_preference: "single" | "4 sharing" | "dormitory";
+	check_in_date: string;
+	check_in_time: string;
+	check_out_date: string;
+	check_out_time: string;
+	college_name: string;
+	college_roll_number: string;
+}
+
 function RouteComponent() {
 	const [step, setStep] = useState<1 | 2>(1);
 	const [gender, setGender] = useState<"male" | "female" | null>(null);
@@ -35,7 +49,7 @@ function RouteComponent() {
 
 		const isAmrita = isAmritaCampus(collegeName);
 
-		const payload: any = {
+		const payload: TFormPayload = {
 			is_amrita_campus: isAmrita,
 			is_male: gender === "male",
 			is_hosteller: false,
@@ -81,8 +95,6 @@ function RouteComponent() {
 			// Transform form data to API payload
 			const payload = transformFormData();
 
-			// console.log("Submitting payload:", payload);
-
 			// API request
 			const response = await fetch("/api/v1/accommodation/", {
 				method: "POST",
@@ -99,7 +111,7 @@ function RouteComponent() {
 				);
 			}
 
-			const data = await response.json();
+			const _data = await response.json();
 
 			// Set success state
 			setSubmitSuccess(true);
