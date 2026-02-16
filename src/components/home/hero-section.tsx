@@ -190,10 +190,15 @@ function HeroSection() {
 					>
 						<div className="bg-black/90 border border-retro-cyan/50 rounded px-3 py-2 md:px-5 md:py-3 shadow-[0_0_15px_rgba(0,255,255,0.2)]">
 							<div className="flex flex-col md:flex-row md:items-center md:gap-4 text-retro-cyan space-y-1 md:space-y-0">
-								<span className="font-vcr text-sm md:text-base tracking-wide">20-21 FEB 2026</span>
+								<span className="font-vcr text-sm md:text-base tracking-wide">
+									20-21 FEB 2026
+								</span>
 								<div className="hidden md:block w-px h-4 bg-retro-cyan/40" />
-								<span className="mx-2 md:hidden font-vcr text-sm text-retro-cyan">|</span>
-								<span className="font-vcr text-sm md:text-base tracking-tight">📍 Amrita School of Business, Coimbatore</span>
+								<span className="mx-2 md:hidden font-vcr text-sm text-retro-cyan">									|
+								</span>
+								<span className="font-vcr text-sm md:text-base tracking-rita School oftight">
+									📍  Amrita School of Business, Coimbatore
+								</span>
 							</div>
 						</div>
 					</motion.div>
